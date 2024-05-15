@@ -1,5 +1,4 @@
 package com.example;
-import java.util.Objects;
 
 public class AdressEntry {
     private String name;

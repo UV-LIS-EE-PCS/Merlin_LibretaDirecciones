@@ -1,48 +1,108 @@
 package com.example;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.*;
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 import de.vandermeer.asciitable.AsciiTable;
 
-
 public class AdressBook {
-    private ArrayList<AdressEntry> listAdress = new ArrayList<>();
+    private ArrayList<AdressEntry> listAdress;
+
     private String red = "\033[31m";
     private String reset = "\u001B[0m";
     private String purple = "\u001B[35m";
     private String yellow = "\033[33m";
     private String cyan = "\033[36m";
 
-    public void addAddress(AdressEntry entry) {
+    public AdressBook() throws FileNotFoundException {
+        String path = "src/main/java/com/example/Contactos.txt";
+        ArrayList<AdressEntry> Adress = FileManagement.fileUploadToArraylist(path);
+        listAdress = new ArrayList<>(Adress);
+    }
+
+    public boolean addAddress(AdressEntry entry) {
         boolean isDuplicate = false;
-        
+
         for (AdressEntry address : listAdress) {
             if (address.toString().equals(entry.toString())) {
                 AsciiTable at = new AsciiTable();
-                at.setPaddingLeftRight(1, 1);    
+                at.setPaddingLeftRight(1, 1);
                 at.addRule();
-                at.addRow("Nombre","Apellido","Calle","Estado","Codigo Postal","Correo Electrónico","Telefono" );
-                System.out.println(purple+"La entrada: "+reset);
-                System.out.println(red+at.render(190)+reset);
+                at.addRow("Nombre", "Apellido", "Calle", "Estado", "Codigo Postal", "Correo Electrónico", "Telefono");
+                System.out.println(purple + "La entrada: " + reset);
+                System.out.println(red + at.render(150) + reset);
                 System.out.println(
-                        red + GenerateTableInfo(entry) + "\n" + purple + "ya existe!!" + reset
+                        red + GenerateInfoTable(entry) + "\n" + purple + "ya existe!!" + reset
                                 + "\n");
-                isDuplicate = true;
-                break;
+                return true;
             }
         }
 
         if (!isDuplicate) {
-            listAdress.add(entry);
+            FileManagement.writeAdressToFile(entry);
+            return isDuplicate;
         }
+        return isDuplicate;
     }
 
     public void deleteAdress(AdressEntry entry) {
-        listAdress.remove(entry);
+        if (listAdress.isEmpty()) {
+            System.out.println(yellow + "Sin datos" + reset);
+        } else {
+            listAdress.remove(entry);
+            System.out.println("Contacto " + purple + entry.getName() + reset + " Removido con exito!");
+        }
+    }
+
+    public void searchAdress(String search) {
+        ArrayList<AdressEntry> entryToDisplay = filterAdress(search);
+        if (entryToDisplay.isEmpty()) {
+            System.out.println(purple + "No se encontró ninguna coincidecia");
+
+        } else {
+            System.out.println(purple + "Resultados de la busqueda:" + reset + "\n");
+            AsciiTable dataText = new AsciiTable();
+            dataText.setPaddingLeftRight(1, 1);
+            dataText.addRule();
+            dataText.addRow("Nombre", "Apellido", "Calle", "Estado", "Codigo Postal", "Correo Electrónico", "Telefono");
+            int counterIndex = 0;
+            for (AdressEntry entry : entryToDisplay) {
+                String higlightText = highlightSearch(entry.getName().toLowerCase(), search.toLowerCase().strip());
+                System.out.println(higlightText);
+                if (counterIndex == 0) {
+                    String rend = dataText.render(150);
+                    System.out.println(rend);
+                }
+
+                System.out.println(purple + GenerateInfoTable(entry) + reset + "\n");
+                counterIndex++;
+
+            }
+        }
+    }
+
+    public void showAdress() {
+        if (listAdress.isEmpty()) {
+            System.out.println(yellow + "Sin datos" + reset);
+        } else {
+            System.out.println(GenerateAllDataTable(listAdress) + "\n");
+
+        }
+    }
+
+    public void uploadAdressFromFile() throws FileNotFoundException {
+        String path = FileManagement.openFileViaExplorer();
+        ArrayList<AdressEntry> newAdressList = FileManagement.fileUploadToArraylist(path);
+        if (newAdressList.isEmpty()) {
+            System.out.println(cyan + "archivo invalido" + reset);
+
+        } else {
+            for (AdressEntry entry : newAdressList) {
+                addAddress(entry);
+                System.out.println(purple + "Archivo importado con exito!");
+
+            }
+        }
     }
 
     private ArrayList<AdressEntry> filterAdress(String search) {
@@ -56,27 +116,38 @@ public class AdressBook {
         return filterAdress;
     }
 
-    public void searchAdress(String search) {
-        ArrayList<AdressEntry> entryToDisplay = filterAdress(search);
-        if (entryToDisplay.isEmpty()) {
-            System.out.println(purple + "No se encontró ninguna coincidecia");
+    private String GenerateAllDataTable(ArrayList<AdressEntry> listEntry) {
+        int numberOfAdress = 1;
 
-        } else {
-            System.out.println(purple + "Resultados de la busqueda:" + reset + "\n");
-            AsciiTable at = new AsciiTable();
-            at.setPaddingLeftRight(1, 1);    
-            at.addRule();
-            at.addRow("Nombre","Apellido","Calle","Estado","Codigo Postal","Correo Electrónico","Telefono" );
-            for(AdressEntry entry: entryToDisplay){
-                String higlightText = highlightSearch(entry.getName().toLowerCase(), search.toLowerCase().strip());
-                System.out.println(higlightText);
-               
-                String rend = at.render(190);
-                System.out.println(rend);
-                System.out.println(purple+GenerateTableInfo(entry) +reset+"\n");
+        AsciiTable dataText = new AsciiTable();
+        dataText.setPaddingLeftRight(1, 1);
+        dataText.addRule();
+        dataText.addRow("Direccion no: ", "Nombre", "Apellido", "Calle", "Estado", "Codigo Postal",
+                "Correo Electrónico",
+                "Telefono");
+        dataText.addRule();
 
-            }
+        for (AdressEntry entry : listEntry) {
+            dataText.addRow(numberOfAdress, entry.getName(), entry.getLastName(), entry.getStreet(), entry.getState(),
+                    entry.getPostalCode(), entry.getEmail(), entry.getPhone());
+            dataText.addRule();
+            numberOfAdress++;
         }
+        String rend = dataText.render(150);
+        return rend;
+    }
+
+    private String GenerateInfoTable(AdressEntry entry) {
+
+        AsciiTable dataText = new AsciiTable();
+        dataText.setPaddingLeftRight(1, 1);
+        dataText.addRule();
+        dataText.addRow(entry.getName(), entry.getLastName(), entry.getStreet(), entry.getState(),
+                entry.getPostalCode(),
+                entry.getEmail(), entry.getPhone());
+        dataText.addRule();
+        String rend = dataText.render(150);
+        return rend;
     }
 
     private String highlightSearch(String string, String search) {
@@ -130,103 +201,6 @@ public class AdressBook {
         }
 
         return listOfPostion;
-    }
-
-    private String openFileViaExplorer() {
-        FileDialog fileDialog = new FileDialog(new Frame(), "Select File", FileDialog.LOAD);
-        
-        fileDialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.out.println("File selection canceled.");
-            }
-        });
-        
-        fileDialog.setVisible(true);
-        
-        String fileName = fileDialog.getFile();
-        if (fileName != null) {
-            String directory = fileDialog.getDirectory();
-            String filePath = directory + fileName;
-            System.out.println(filePath);
-            
-            return filePath;
-        } else {
-            System.out.println("No file selected.");
-            
-            return "";
-        }
-    }
-
-    public void fileUpload() throws FileNotFoundException {
-        String path = openFileViaExplorer();
-
-        File file = new File(path);
-
-        Scanner scan = new Scanner(file);
-
-        int lineText = 1;
-
-        String completeText = "";
-
-        while (scan.hasNextLine()) {
-
-            String line = scan.nextLine();
-            completeText += line + ",";
-            if (lineText % 7 == 0) {
-                String[] atributes = completeText.split(",");
-                AdressEntry newEntry = new AdressEntry(atributes[0], atributes[1], atributes[2],
-                        atributes[3], atributes[4], atributes[5], atributes[6]);
-                addAddress(newEntry);
-                completeText = "";
-            }
-            lineText++;
-        }
-        System.out.println("\n" + cyan + "archivo importado con exito!" + reset + "\n");
-        scan.close();
-        if (lineText < 7) {
-            System.out.println("Archivo invalido");
-
-        }
-
-    }
-
-    public void showAdress() {
-        if (listAdress.isEmpty()) {
-            System.out.println(yellow+"Sin datos"+reset);
-        } else {
-           System.out.println(showGenerateTableInfo(listAdress)+"\n");
-            
-        }
-    }
-
-    private String showGenerateTableInfo(ArrayList<AdressEntry> listEntry){
-        int numberOfAdress = 1;
-        
-        AsciiTable at = new AsciiTable();
-        at.setPaddingLeftRight(1, 1);
-        at.addRule();
-        at.addRow("Direccion no: ","Nombre","Apellido","Calle","Estado","Codigo Postal","Correo Electrónico","Telefono" );
-        at.addRule();
-            
-        for (AdressEntry entry : listEntry) {
-            at.addRow(numberOfAdress,entry.getName(),entry.getLastName(),entry.getStreet(),entry.getState(),entry.getPostalCode(),entry.getEmail(),entry.getPhone());
-            at.addRule();
-            numberOfAdress++;
-        }
-        String rend = at.render(190);
-        return rend;
-    }
-
-    private String GenerateTableInfo(AdressEntry entry){
-        
-        AsciiTable at = new AsciiTable();
-        at.setPaddingLeftRight(1, 1);
-        at.addRule();
-        at.addRow(entry.getName(),entry.getLastName(),entry.getStreet(),entry.getState(),entry.getPostalCode(),entry.getEmail(),entry.getPhone());
-        at.addRule();
-        String rend = at.render(190);
-        return rend;
     }
 
 }
