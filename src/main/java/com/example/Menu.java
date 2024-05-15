@@ -4,13 +4,8 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 
 public class Menu {
-    private AdressBook adressList = new AdressBook();
 
-    public Menu() throws FileNotFoundException {
-
-    }
-
-    public void options() {
+    private void options() {
         System.out.println("=============================================");
         System.out.println(
                 "|           " + ConsoleColors.PURPLE_BOLD + "Selecciona una opcion" + ConsoleColors.BLACK
@@ -36,46 +31,15 @@ public class Menu {
         System.out.println("=============================================");
     }
 
-    public void displayMenu() throws FileNotFoundException {
+    public String displayMenu() throws FileNotFoundException {
         System.out.println(
                 ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
-        String option;
+        options();
         Scanner scan = new Scanner(System.in);
-        while (true) {
-            options();
-            System.out.print(ConsoleColors.RED_BOLD + "$ ");
-            option = scan.nextLine();
-            System.out.println(ConsoleColors.BLACK);
-            switch (option) {
-                case "a":
-
-                    break;
-                case "b":
-
-                    break;
-                case "c":
-
-                    break;
-                case "d":
-
-                    break;
-                case "e":
-
-                    break;
-                case "f":
-
-                    break;
-                case "g":
-
-                    break;
-
-                default:
-                    System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" + ConsoleColors.BLACK);
-                    break;
-            }
-
-        }
-
+        System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
+        String option = scan.nextLine();
+        System.out.println(ConsoleColors.BLACK);
+        return option;
     }
 
 }

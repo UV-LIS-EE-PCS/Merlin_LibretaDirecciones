@@ -90,8 +90,7 @@ public class AdressBook {
         }
     }
 
-    public void uploadAdressFromFile() throws FileNotFoundException {
-        String path = FileManagement.openFileViaExplorer();
+    public void uploadAdressFromFile(String path) throws FileNotFoundException {
         ArrayList<AdressEntry> newAdressList = FileManagement.fileUploadToArraylist(path);
         if (newAdressList.isEmpty()) {
             System.out.println(cyan + "archivo invalido" + reset);

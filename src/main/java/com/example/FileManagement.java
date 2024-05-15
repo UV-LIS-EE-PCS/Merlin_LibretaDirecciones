@@ -1,39 +1,43 @@
 package com.example;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import javax.swing.SwingUtilities;
 
 public class FileManagement {
-
     public static String openFileViaExplorer() {
-        FileDialog fileDialog = new FileDialog(new Frame(), "Select File", FileDialog.LOAD);
+        final String[] filePath = { "" };
 
-        fileDialog.addWindowListener(new WindowAdapter() {
+        // Asegúrate de que esto se ejecute en el hilo de eventos
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void windowClosing(WindowEvent e) {
-                System.out.println("File selection canceled.");
+            public void run() {
+                FileDialog fileDialog = new FileDialog((Frame) null, "Select File", FileDialog.LOAD);
+                fileDialog.setVisible(true);
+
+                String fileName = fileDialog.getFile();
+                if (fileName != null) {
+                    String directory = fileDialog.getDirectory();
+                    filePath[0] = directory + fileName;
+                } else {
+                    filePath[0] = "";
+                }
             }
         });
-
-        fileDialog.setVisible(true);
-
-        String fileName = fileDialog.getFile();
-        if (fileName != null) {
-            String directory = fileDialog.getDirectory();
-            String filePath = directory + fileName;
-            System.out.println(filePath);
-
-            return filePath;
-        } else {
-            System.out.println("No file selected.");
-
-            return "";
+        // Esperar a que el FileDialog se cierre y obtener el resultado
+        while (filePath[0].isEmpty()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
         }
+
+        return filePath[0];
     }
 
     public static ArrayList<AdressEntry> fileUploadToArraylist(String path) throws FileNotFoundException {
