@@ -3,31 +3,32 @@ package com.example;
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.awt.FileDialog;
-import java.awt.Frame;
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 public class FileManagement {
+    
+    
     public static String openFileViaExplorer() {
         final String[] filePath = { "" };
 
-        // Asegúrate de que esto se ejecute en el hilo de eventos
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                FileDialog fileDialog = new FileDialog((Frame) null, "Select File", FileDialog.LOAD);
-                fileDialog.setVisible(true);
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Select File");
 
-                String fileName = fileDialog.getFile();
-                if (fileName != null) {
-                    String directory = fileDialog.getDirectory();
-                    filePath[0] = directory + fileName;
+                int result = fileChooser.showOpenDialog(null);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    filePath[0] = selectedFile.getAbsolutePath();
                 } else {
                     filePath[0] = "";
                 }
             }
         });
-        // Esperar a que el FileDialog se cierre y obtener el resultado
+
         while (filePath[0].isEmpty()) {
             try {
                 Thread.sleep(100);
@@ -38,6 +39,39 @@ public class FileManagement {
         }
 
         return filePath[0];
+    }
+
+    public static String openDirectoryViaExplorer() {
+        final String[] directoryPath = { "" };
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.setDialogTitle("Select Directory");
+
+                int result = fileChooser.showOpenDialog(null);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedDirectory = fileChooser.getSelectedFile();
+                    directoryPath[0] = selectedDirectory.getAbsolutePath();
+                } else {
+                    directoryPath[0] = "";
+                }
+            }
+        });
+
+        while (directoryPath[0].isEmpty()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        return directoryPath[0];
     }
 
     public static ArrayList<AdressEntry> fileUploadToArraylist(String path) throws FileNotFoundException {

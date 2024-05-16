@@ -1,5 +1,8 @@
 package com.example;
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.io.*;
 import de.vandermeer.asciitable.AsciiTable;
@@ -108,6 +111,18 @@ public class AdressBook {
         }
     }
 
+    public void exportAdressBook(String path) {
+        Path sourcePath = Paths.get("src/main/java/com/example/Contactos.txt");
+        Path destinationPath = Paths.get(path);
+        try {
+            // Copiar el archivo con opción de sobrescribir
+            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println(ConsoleColors.PURPLE+"El archivo ha sido copiado con éxito."+ConsoleColors.BLACK);
+        } catch (IOException e) {
+            System.err.println("Error al copiar el archivo: " + e.getMessage());
+        }
+    }
+
     public ArrayList<AdressEntry> filterAdress(String search) {
         ArrayList<AdressEntry> filterAdress = new ArrayList<>();
         for (AdressEntry entry : listAdress) {
@@ -160,7 +175,7 @@ public class AdressBook {
         for (int i = 0; i < string.length(); i++) {
 
             if (i == listOfPositions.get(indexCounter)[0]) {
-                finalString += ConsoleColors.PURPLE_BACKGROUND;
+                finalString += ConsoleColors.PURPLE_UNDERLINED;
             }
             if (i == listOfPositions.get(indexCounter)[1]) {
                 finalString += ConsoleColors.BLACK;

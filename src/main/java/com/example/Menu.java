@@ -196,23 +196,25 @@ public class Menu {
                 switch (deleteOption) {
                     case "e":
                         // Eliminar todas las coincidencias
+                        System.out.println(ConsoleColors.PURPLE+"Registros eliminados:"+ConsoleColors.BLACK);
                         for (AdressEntry entry : adressToDelete) {
                             adressList.deleteAdress(entry);
+                            System.out.println(entry.getName());
                         }
                         break;
                     case "c":
                         // Cancelar
-                        System.out.println("Operación cancelada.");
+                        System.out.println(ConsoleColors.CYAN+"Operación cancelada."+ ConsoleColors.BLACK);
                         break;
                     default:
                         if (regexComparation("\\b\\d+(,\\d+)*\\b", deleteOption)) {
                             String[] adressToRemove = deleteOption.split(",");
                             for (String indexRemove : adressToRemove) {
                                 int index = Integer.parseInt(indexRemove);
-                                // Asegúrate de que el índice esté dentro del rango de `adressToDelete`
                                 if (index >= 0 && index < adressToDelete.size()) {
                                     AdressEntry entry = adressToDelete.get(index);
                                     adressList.deleteAdress(entry);
+                                    System.out.println(ConsoleColors.BLACK+index +"."+entry.getName()+ConsoleColors.PURPLE+" eliminado correctamente"+ConsoleColors.BLACK);
                                 } else {
                                     System.out.println("Índice fuera de los límites: " + index);
                                 }
@@ -279,7 +281,7 @@ public class Menu {
                 "|           " + ConsoleColors.PURPLE_BOLD + "Selecciona una opcion" + ConsoleColors.BLACK
                         + "           |");
         System.out.println("=============================================");
-        System.out.println("|           " + ConsoleColors.CYAN_BOLD_BRIGHT + "Opciones:" + ConsoleColors.BLACK
+        System.out.println("|           " + ConsoleColors.PURPLE_BRIGHT + "Opciones:" + ConsoleColors.BLACK
                 + "                       |");
         System.out.println(
                 "|                    " + ConsoleColors.YELLOW + "(a)" + ConsoleColors.BLACK + " Cargar archivo     |");
@@ -326,8 +328,13 @@ public class Menu {
                     toShow(adressList);
                     break;
                 case "f":
+                    System.out.println("selecciona el path del archivo");    
+                    String directoryPath = FileManagement.openDirectoryViaExplorer();
+                    System.out.print("Coloca el nombre del archivo sin la extension: "+ConsoleColors.RED);    
+                    String name = scan.nextLine();
+                    adressList.exportAdressBook(directoryPath +"\\"+name);
 
-                    break;
+                        break;
                 case "g":
                     toExit();
                 default:
