@@ -358,8 +358,7 @@ public class Menu {
                     toShow(adressList);
                     break;
                 case "f":
-                    
-
+                    toExport(adressList);
                         break;
                 case "g":
                     toExit();
