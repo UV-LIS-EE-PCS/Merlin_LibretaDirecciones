@@ -270,10 +270,40 @@ public class Menu {
         }
     }
 
+    private void toExport(AdressBook adressList){
+        
+        boolean isCorrect = false;
+        while (!isCorrect) {
+            System.out.println("selecciona el directorio del archivo desde la ventana..");    
+            String directoryPath = FileManagement.openDirectoryViaExplorer();
+            System.out.print("Coloca el nombre del archivo sin la extension: "+ConsoleColors.RED);    
+            String name = scan.nextLine();
+            adressList.exportAdressBook(directoryPath +"\\"+name+".txt");
+            System.out.print(
+                    "volver al menu? " + ConsoleColors.RED + " [si]" + ConsoleColors.BLACK
+                            + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
+            String exit = scan.nextLine();
+            System.out.println(ConsoleColors.BLACK);
+            switch (exit) {
+                case "si":
+                    isCorrect = true;
+                case "no":
+                    break;
+                default:
+                    System.out.println(
+                            ConsoleColors.PURPLE + "Selecciona una opción valida!" + ConsoleColors.BLACK);
+                    break;
+
+            }
+        }
+    }
+
     private boolean regexComparation(String regexExpresion, String string) {
         return Pattern.matches(regexExpresion, string);
 
     }
+
+
 
     private void options() {
         System.out.println("=============================================");
@@ -328,11 +358,7 @@ public class Menu {
                     toShow(adressList);
                     break;
                 case "f":
-                    System.out.println("selecciona el path del archivo");    
-                    String directoryPath = FileManagement.openDirectoryViaExplorer();
-                    System.out.print("Coloca el nombre del archivo sin la extension: "+ConsoleColors.RED);    
-                    String name = scan.nextLine();
-                    adressList.exportAdressBook(directoryPath +"\\"+name);
+                    
 
                         break;
                 case "g":
