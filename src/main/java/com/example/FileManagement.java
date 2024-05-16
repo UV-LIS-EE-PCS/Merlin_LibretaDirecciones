@@ -70,14 +70,13 @@ public class FileManagement {
     public static void writeAdressToFile(AdressEntry entry) {
         String nombreArchivo = "src/main/java/com/example/Contactos.txt";
         try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(nombreArchivo, true))) {
-            bufferEscritor.write("\n");
             bufferEscritor.write(entry.getName() + "\n");
             bufferEscritor.write(entry.getLastName() + "\n");
             bufferEscritor.write(entry.getStreet() + "\n");
             bufferEscritor.write(entry.getState() + "\n");
             bufferEscritor.write(entry.getPostalCode() + "\n");
             bufferEscritor.write(entry.getEmail() + "\n");
-            bufferEscritor.write(entry.getPhone());
+            bufferEscritor.write(entry.getPhone() + "\n");
             bufferEscritor.close();
 
         } catch (IOException e) {

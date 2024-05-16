@@ -41,6 +41,16 @@ public class AdressBook {
         return isDuplicate;
     }
 
+    public void deleteAdress(int index) {
+        if (listAdress.isEmpty()) {
+            System.out.println("lista vacia");
+        } else {
+            AdressEntry entry = listAdress.get(index);
+            listAdress.remove(entry);
+            FileManagement.replaceArraylistToContacts(listAdress);
+        }
+    }
+
     public void deleteAdress(AdressEntry entry) {
         if (listAdress.isEmpty()) {
             System.out.println("lista vacia");

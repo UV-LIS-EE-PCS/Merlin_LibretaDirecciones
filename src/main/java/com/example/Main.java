@@ -8,45 +8,6 @@ import java.util.regex.Pattern;
 public class Main {
     private static Scanner scan = new Scanner(System.in);
 
-    private static void toDelete(AdressBook adressList) {
-        System.out.print(ConsoleColors.CYAN + "¿Que registro deseas eliminar?: " + ConsoleColors.RED);
-        String search = scan.nextLine();
-        ArrayList<AdressEntry> adressToDelete = adressList.filterAdress(search);
-        if (!adressToDelete.isEmpty()) {
-            System.out.println(ConsoleColors.BLACK + "coincidencias:");
-            for (AdressEntry entry : adressToDelete) {
-                System.out.println(adressToDelete.indexOf(entry) + "."
-                        + AdressBook.highlightSearch(entry.getName(), search));
-            }
-
-        }
-        System.out.println("Que opcion deseas?:" +
-                ConsoleColors.CYAN
-                + "\ncoloca en forma de lista las direcciones a eliminar:" + ConsoleColors.BLACK
-                + ConsoleColors.CYAN_BOLD
-                + " [1,2,3,4]" + ConsoleColors.BLUE
-                + "\neliminar todas las coincidencias " + ConsoleColors.BLUE_BOLD + "[e]" + ConsoleColors.PURPLE
-                + "\ncancelar" + ConsoleColors.PURPLE_BOLD + " [c]" + ConsoleColors.RED_BOLD);
-        System.out.print("$ " + ConsoleColors.RED);
-        String DeleteOption = scan.nextLine();
-        switch (DeleteOption) {
-            case "c":
-
-                break;
-            case "e":
-
-                break;
-            default:
-                if (regexComparation("\\\\b\\\\d+(,\\\\d+)*\\\\b", DeleteOption)) {
-                    String[] adressToRemove = DeleteOption.split(",");
-
-                }
-
-                break;
-        }
-
-    }
-
     private static void toSearch(AdressBook adressList) {
         System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
         String search = scan.nextLine();
@@ -118,6 +79,63 @@ public class Main {
         }
     }
 
+    private static void toDelete(AdressBook adressList) {
+        System.out.print(ConsoleColors.CYAN + "¿Qué registro deseas eliminar?: " + ConsoleColors.RED);
+        String search = scan.nextLine();
+
+        // Filtrar direcciones que coinciden con la búsqueda
+        ArrayList<AdressEntry> adressToDelete = adressList.filterAdress(search);
+        if (!adressToDelete.isEmpty()) {
+            System.out.println(ConsoleColors.BLACK + "Coincidencias:");
+            for (AdressEntry entry : adressToDelete) {
+                System.out.println(adressToDelete.indexOf(entry) + "."
+                        + AdressBook.highlightSearch(entry.getName(), search));
+            }
+
+            System.out.println("¿Qué opción deseas?:" +
+                    ConsoleColors.CYAN
+                    + "\nColoca en forma de lista las direcciones a eliminar:" + ConsoleColors.BLACK
+                    + ConsoleColors.CYAN_BOLD
+                    + " [1,2,3,4]" + ConsoleColors.BLUE
+                    + "\nEliminar todas las coincidencias " + ConsoleColors.BLUE_BOLD + "[e]" + ConsoleColors.PURPLE
+                    + "\nCancelar" + ConsoleColors.PURPLE_BOLD + " [c]" + ConsoleColors.RED_BOLD);
+            System.out.print("$ " + ConsoleColors.RED);
+            String deleteOption = scan.nextLine();
+
+            switch (deleteOption) {
+                case "e":
+                    // Eliminar todas las coincidencias
+                    for (AdressEntry entry : adressToDelete) {
+                        adressList.deleteAdress(entry);
+                    }
+                    break;
+                case "c":
+                    // Cancelar
+                    System.out.println("Operación cancelada.");
+                    break;
+                default:
+                    if (regexComparation("\\b\\d+(,\\d+)*\\b", deleteOption)) {
+                        String[] adressToRemove = deleteOption.split(",");
+                        for (String indexRemove : adressToRemove) {
+                            int index = Integer.parseInt(indexRemove);
+                            // Asegúrate de que el índice esté dentro del rango de `adressToDelete`
+                            if (index >= 0 && index < adressToDelete.size()) {
+                                AdressEntry entry = adressToDelete.get(index);
+                                adressList.deleteAdress(entry);
+                            } else {
+                                System.out.println("Índice fuera de los límites: " + index);
+                            }
+                        }
+                    } else {
+                        System.out.println("Formato de entrada inválido.");
+                    }
+                    break;
+            }
+        } else {
+            System.out.println("No se encontraron coincidencias.");
+        }
+    }
+
     private static boolean regexComparation(String regexExpresion, String string) {
         return Pattern.matches(regexExpresion, string);
 
@@ -152,7 +170,8 @@ public class Main {
                 case "g":
                     toExit();
                 default:
-                    System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" + ConsoleColors.BLACK);
+                    System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" +
+                            ConsoleColors.BLACK);
                     break;
             }
         }
