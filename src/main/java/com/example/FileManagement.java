@@ -85,4 +85,19 @@ public class FileManagement {
             e.printStackTrace();
         }
     }
+
+    public static void replaceArraylistToContacts(ArrayList<AdressEntry> list) {
+        emptyFile("src/main/java/com/example/Contactos.txt");
+        for (AdressEntry adressToWrite : list) {
+            writeAdressToFile(adressToWrite);
+        }
+    }
+
+    public static void emptyFile(String filePath) {
+        try (FileOutputStream fos = new FileOutputStream(new File(filePath))) {
+            // truncate file
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

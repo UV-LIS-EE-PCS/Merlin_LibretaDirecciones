@@ -2,17 +2,10 @@ package com.example;
 
 import java.util.ArrayList;
 import java.io.*;
-
 import de.vandermeer.asciitable.AsciiTable;
 
 public class AdressBook {
     private ArrayList<AdressEntry> listAdress;
-
-    private String red = "\033[31m";
-    private String reset = "\u001B[0m";
-    private String purple = "\u001B[35m";
-    private String yellow = "\033[33m";
-    private String cyan = "\033[36m";
 
     public AdressBook() throws FileNotFoundException {
         String path = "src/main/java/com/example/Contactos.txt";
@@ -29,17 +22,20 @@ public class AdressBook {
                 at.setPaddingLeftRight(1, 1);
                 at.addRule();
                 at.addRow("Nombre", "Apellido", "Calle", "Estado", "Codigo Postal", "Correo Electrónico", "Telefono");
-                System.out.println(purple + "La entrada: " + reset);
-                System.out.println(red + at.render(150) + reset);
+                System.out.println(ConsoleColors.PURPLE + "La entrada: " + ConsoleColors.BLACK);
+                System.out.println(ConsoleColors.RED + at.render(150) + ConsoleColors.BLACK);
                 System.out.println(
-                        red + GenerateInfoTable(entry) + "\n" + purple + "ya existe!!" + reset
+                        ConsoleColors.RED + GenerateInfoTable(entry) + "\n" + ConsoleColors.PURPLE + "ya existe!!"
+                                + ConsoleColors.BLACK
                                 + "\n");
                 return true;
             }
         }
 
         if (!isDuplicate) {
+            listAdress.add(entry);
             FileManagement.writeAdressToFile(entry);
+
             return isDuplicate;
         }
         return isDuplicate;
@@ -47,20 +43,19 @@ public class AdressBook {
 
     public void deleteAdress(AdressEntry entry) {
         if (listAdress.isEmpty()) {
-            System.out.println(yellow + "Sin datos" + reset);
+            System.out.println("lista vacia");
         } else {
             listAdress.remove(entry);
-            System.out.println("Contacto " + purple + entry.getName() + reset + " Removido con exito!");
+            FileManagement.replaceArraylistToContacts(listAdress);
         }
     }
 
     public void searchAdress(String search) {
         ArrayList<AdressEntry> entryToDisplay = filterAdress(search);
         if (entryToDisplay.isEmpty()) {
-            System.out.println(purple + "No se encontró ninguna coincidecia");
-
+            System.out.println(ConsoleColors.PURPLE + "No se encontró ninguna coincidecia");
         } else {
-            System.out.println(purple + "Resultados de la busqueda:" + reset + "\n");
+            System.out.println(ConsoleColors.PURPLE + "Resultados de la busqueda:" + ConsoleColors.BLACK + "\n");
             AsciiTable dataText = new AsciiTable();
             dataText.setPaddingLeftRight(1, 1);
             dataText.addRule();
@@ -68,13 +63,13 @@ public class AdressBook {
             int counterIndex = 0;
             for (AdressEntry entry : entryToDisplay) {
                 String higlightText = highlightSearch(entry.getName().toLowerCase(), search.toLowerCase().strip());
-                System.out.println(higlightText);
+                System.out.println(higlightText + ConsoleColors.BLACK + "\n");
                 if (counterIndex == 0) {
                     String rend = dataText.render(150);
                     System.out.println(rend);
                 }
 
-                System.out.println(purple + GenerateInfoTable(entry) + reset + "\n");
+                System.out.println(ConsoleColors.PURPLE + GenerateInfoTable(entry) + ConsoleColors.BLACK + "\n");
                 counterIndex++;
 
             }
@@ -83,7 +78,7 @@ public class AdressBook {
 
     public void showAdress() {
         if (listAdress.isEmpty()) {
-            System.out.println(yellow + "Sin datos" + reset);
+            System.out.println(ConsoleColors.CYAN + "Sin datos" + ConsoleColors.BLACK);
         } else {
             System.out.println(GenerateAllDataTable(listAdress) + "\n");
 
@@ -93,18 +88,17 @@ public class AdressBook {
     public void uploadAdressFromFile(String path) throws FileNotFoundException {
         ArrayList<AdressEntry> newAdressList = FileManagement.fileUploadToArraylist(path);
         if (newAdressList.isEmpty()) {
-            System.out.println(cyan + "archivo invalido" + reset);
+            System.out.println(ConsoleColors.CYAN + "archivo invalido" + ConsoleColors.BLACK);
 
         } else {
             for (AdressEntry entry : newAdressList) {
                 addAddress(entry);
-                System.out.println(purple + "Archivo importado con exito!");
 
             }
         }
     }
 
-    private ArrayList<AdressEntry> filterAdress(String search) {
+    public ArrayList<AdressEntry> filterAdress(String search) {
         ArrayList<AdressEntry> filterAdress = new ArrayList<>();
         for (AdressEntry entry : listAdress) {
             if (entry.getName().toLowerCase().contains(search.toLowerCase())) {
@@ -149,17 +143,17 @@ public class AdressBook {
         return rend;
     }
 
-    private String highlightSearch(String string, String search) {
+    public static String highlightSearch(String string, String search) {
         ArrayList<int[]> listOfPositions = find(string, search);
         String finalString = "";
         int indexCounter = 0;
         for (int i = 0; i < string.length(); i++) {
 
             if (i == listOfPositions.get(indexCounter)[0]) {
-                finalString += purple;
+                finalString += ConsoleColors.PURPLE_BACKGROUND;
             }
             if (i == listOfPositions.get(indexCounter)[1]) {
-                finalString += reset;
+                finalString += ConsoleColors.BLACK;
                 if (listOfPositions.size() == indexCounter + 1) {
                     indexCounter = listOfPositions.size() - 1;
                 } else {
@@ -170,11 +164,11 @@ public class AdressBook {
             finalString += string.charAt(i);
         }
 
-        return finalString;
+        return finalString + ConsoleColors.BLACK;
 
     }
 
-    private ArrayList<int[]> find(String string, String search) {
+    public static ArrayList<int[]> find(String string, String search) {
         int[] positionSearch = new int[2];
         ArrayList<int[]> listOfPostion = new ArrayList<>();
 
