@@ -6,19 +6,19 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Menu {
-        private Scanner scan = new Scanner(System.in);
-        
-        private void toSearch(AdressBook adressList) {
-            boolean isCorrect = false;
-            while (!isCorrect) {
-                System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
+    private Scanner scan = new Scanner(System.in);
+
+    private void toSearch(AdressBook adressList) {
+        boolean isCorrect = false;
+        while (!isCorrect) {
+            System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
             String search = scan.nextLine();
             adressList.searchAdress(search);
-            
+
             System.out.print(
-                "volver al menu? " + ConsoleColors.RED + " [si]" + ConsoleColors.BLACK
-                        + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
-        
+                    "volver al menu? " + ConsoleColors.RED + " [si]" + ConsoleColors.BLACK
+                            + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
+
             String exit = scan.nextLine();
             System.out.println(ConsoleColors.BLACK);
             switch (exit) {
@@ -36,93 +36,67 @@ public class Menu {
     }
 
     private void toAdd(AdressBook adressList) {
-            boolean isCorrect = false;
-            boolean isCorrectEntry = false;
-            String name = "no data";
-            String lastName = "no data";
-            String street = "no data";
-            String state = "no data";
-            String postalCode = "no data";
-            String email = "no data";
-            String phone = "no data";
-
-            while (!isCorrect) {
-                System.out.print(ConsoleColors.BLACK + "Nombre: " + ConsoleColors.RED);
-                name = scan.nextLine();
-
-                System.out.print(ConsoleColors.BLACK+ "Apellido: " + ConsoleColors.RED);
-                lastName = scan.nextLine();
-
-                System.out.print(ConsoleColors.BLACK + "Calle: " + ConsoleColors.RED);
-                street = scan.nextLine();
-
-                System.out.print(ConsoleColors.BLACK + "Estado: " + ConsoleColors.RED);
-                state = scan.nextLine();
-                
-                isCorrectEntry = false;
-                while (!isCorrectEntry ) {
-                        System.out.print(ConsoleColors.BLACK + "Código postal: " + ConsoleColors.RED);
-                        postalCode = scan.nextLine();
-                        if (postalCode.length() == 5 && regexComparation("\\d+", postalCode)) {
-                        isCorrectEntry = true;
-                        } else {
-                        System.out.println("codigo postal invalido, debe de ser un numero y contener 5 caracteres");
-                        }
-                }
-
-                
-                isCorrectEntry= false;
-                while (!isCorrectEntry) {
-                        System.out.print(ConsoleColors.BLACK + "Correo Electrónico: " + ConsoleColors.RED);
-                        email = scan.nextLine();
-                        if (regexComparation("^(.+)@(.+)$", email)) {
-                                isCorrectEntry = true;
-                        } else {
-                                System.out.println("inserta un correo valido Ejemplo : rafael@gmail.com");
-                        }
-                }
-                
-                isCorrectEntry = false;
-                while (!isCorrectEntry ) {
-                        System.out.print(ConsoleColors.BLACK + "Número de teléfono: " + ConsoleColors.RED);
-                        phone = scan.nextLine();
-                        if (phone.length() == 10 && regexComparation("\\d+", phone)) {
-                        isCorrectEntry = true;
-                        } else {
-                        System.out.println("Numero invalido , el número debe de contener 10 caracteres");
-                        }
-                }
-
-                AdressEntry newEntry = new AdressEntry(name, lastName, street, state, postalCode, email, phone);
-                adressList.addAddress(newEntry);
-                System.out.println("\n~"+ConsoleColors.PURPLE_BOLD+"+Dirección agregada con exito!"+ConsoleColors.BLACK);
-
-                System.out.print(
-                        "volver al menu? " + ConsoleColors.RED + " [si]" + ConsoleColors.BLACK
-                                + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
-                String exit = scan.nextLine();
-                System.out.println(ConsoleColors.BLACK);
-                switch (exit) {
-                        case "si":
-                        isCorrect = true;
-                        case "no":
-                        break;
-                        default:
-                        System.out.println(
-                                ConsoleColors.PURPLE + "Selecciona una opción valida!" + ConsoleColors.BLACK);
-                        break;
-
-                }
-                
-        }
-
-    }
-
-    private void toFileUpload(AdressBook adressList) throws FileNotFoundException {
         boolean isCorrect = false;
+        boolean isCorrectEntry = false;
+        String name = "no data";
+        String lastName = "no data";
+        String street = "no data";
+        String state = "no data";
+        String postalCode = "no data";
+        String email = "no data";
+        String phone = "no data";
+
         while (!isCorrect) {
-            System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
-            adressList.uploadAdressFromFile(FileManagement.openFileViaExplorer());
+            System.out.print(ConsoleColors.BLACK + "Nombre: " + ConsoleColors.RED);
+            name = scan.nextLine();
+
+            System.out.print(ConsoleColors.BLACK + "Apellido: " + ConsoleColors.RED);
+            lastName = scan.nextLine();
+
+            System.out.print(ConsoleColors.BLACK + "Calle: " + ConsoleColors.RED);
+            street = scan.nextLine();
+
+            System.out.print(ConsoleColors.BLACK + "Estado: " + ConsoleColors.RED);
+            state = scan.nextLine();
+
+            isCorrectEntry = false;
+            while (!isCorrectEntry) {
+                System.out.print(ConsoleColors.BLACK + "Código postal: " + ConsoleColors.RED);
+                postalCode = scan.nextLine();
+                if (postalCode.length() == 5 && regexComparation("\\d+", postalCode)) {
+                    isCorrectEntry = true;
+                } else {
+                    System.out.println("codigo postal invalido, debe de ser un numero y contener 5 caracteres");
+                }
+            }
+
+            isCorrectEntry = false;
+            while (!isCorrectEntry) {
+                System.out.print(ConsoleColors.BLACK + "Correo Electrónico: " + ConsoleColors.RED);
+                email = scan.nextLine();
+                if (regexComparation("^(.+)@(.+)$", email)) {
+                    isCorrectEntry = true;
+                } else {
+                    System.out.println("inserta un correo valido Ejemplo : rafael@gmail.com");
+                }
+            }
+
+            isCorrectEntry = false;
+            while (!isCorrectEntry) {
+                System.out.print(ConsoleColors.BLACK + "Número de teléfono: " + ConsoleColors.RED);
+                phone = scan.nextLine();
+                if (phone.length() == 10 && regexComparation("\\d+", phone)) {
+                    isCorrectEntry = true;
+                } else {
+                    System.out.println("Numero invalido , el número debe de contener 10 caracteres");
+                }
+            }
+
+            AdressEntry newEntry = new AdressEntry(name, lastName, street, state, postalCode, email, phone);
+            adressList.addAddress(newEntry);
+            System.out.println(
+                    "\n~" + ConsoleColors.PURPLE_BOLD + "+Dirección agregada con exito!" + ConsoleColors.BLACK);
+
             System.out.print(
                     "volver al menu? " + ConsoleColors.RED + " [si]" + ConsoleColors.BLACK
                             + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
@@ -139,8 +113,50 @@ public class Menu {
                     break;
 
             }
+
         }
 
+    }
+
+    private void toFileUpload(AdressBook addressList) throws FileNotFoundException {
+        boolean isCorrect = false;
+        while (!isCorrect) {
+            System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
+            String path = FileManagement.openFileViaExplorer();
+
+            if ("CANCELLED".equals(path)) {
+                System.out.println(ConsoleColors.RED + "Operación cancelada. Volviendo al menú." + ConsoleColors.BLACK);
+                break;
+            }
+
+            try {
+                addressList.uploadAdressFromFile(path);
+            } catch (FileNotFoundException e) {
+                System.out.println(
+                        ConsoleColors.RED + "Archivo no encontrado. Inténtalo de nuevo." + ConsoleColors.BLACK);
+                continue;
+            }
+
+            System.out.print(
+                    "Volver al menú? " + ConsoleColors.RED + "[si]" + ConsoleColors.BLACK
+                            + ConsoleColors.BLUE + "[no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
+            String exit = scan.nextLine();
+            System.out.println(ConsoleColors.BLACK);
+            switch (exit) {
+                case "si":
+                    isCorrect = true;
+                    break;
+                case "no":
+                    break;
+                default:
+                    System.out.println(ConsoleColors.PURPLE + "Selecciona una opción válida!" + ConsoleColors.BLACK);
+                    break;
+            }
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+            Thread.interrupted();
+        }
     }
 
     private void toExit() {
@@ -179,7 +195,7 @@ public class Menu {
             if (!adressToDelete.isEmpty()) {
                 System.out.println(ConsoleColors.CYAN_BOLD + "Coincidencias:");
                 for (AdressEntry entry : adressToDelete) {
-                    System.out.println(ConsoleColors.BLUE+adressToDelete.indexOf(entry)+ConsoleColors.BLACK + "."
+                    System.out.println(ConsoleColors.BLUE + adressToDelete.indexOf(entry) + ConsoleColors.BLACK + "."
                             + AdressBook.highlightSearch(entry.getName(), search));
                 }
 
@@ -196,7 +212,7 @@ public class Menu {
                 switch (deleteOption) {
                     case "e":
                         // Eliminar todas las coincidencias
-                        System.out.println(ConsoleColors.PURPLE+"Registros eliminados:"+ConsoleColors.BLACK);
+                        System.out.println(ConsoleColors.PURPLE + "Registros eliminados:" + ConsoleColors.BLACK);
                         for (AdressEntry entry : adressToDelete) {
                             adressList.deleteAdress(entry);
                             System.out.println(entry.getName());
@@ -204,7 +220,7 @@ public class Menu {
                         break;
                     case "c":
                         // Cancelar
-                        System.out.println(ConsoleColors.CYAN+"Operación cancelada."+ ConsoleColors.BLACK);
+                        System.out.println(ConsoleColors.CYAN + "Operación cancelada." + ConsoleColors.BLACK);
                         break;
                     default:
                         if (regexComparation("\\b\\d+(,\\d+)*\\b", deleteOption)) {
@@ -214,7 +230,8 @@ public class Menu {
                                 if (index >= 0 && index < adressToDelete.size()) {
                                     AdressEntry entry = adressToDelete.get(index);
                                     adressList.deleteAdress(entry);
-                                    System.out.println(ConsoleColors.BLACK+index +"."+entry.getName()+ConsoleColors.PURPLE+" eliminado correctamente"+ConsoleColors.BLACK);
+                                    System.out.println(ConsoleColors.BLACK + index + "." + entry.getName()
+                                            + ConsoleColors.PURPLE + " eliminado correctamente" + ConsoleColors.BLACK);
                                 } else {
                                     System.out.println("Índice fuera de los límites: " + index);
                                 }
@@ -270,15 +287,22 @@ public class Menu {
         }
     }
 
-    private void toExport(AdressBook adressList){
-        
+    private void toExport(AdressBook adressList) {
+
         boolean isCorrect = false;
         while (!isCorrect) {
-            System.out.println("selecciona el directorio del archivo desde la ventana..");    
+            System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
             String directoryPath = FileManagement.openDirectoryViaExplorer();
-            System.out.print("Coloca el nombre del archivo sin la extension: "+ConsoleColors.RED);    
+
+            if ("CANCELLED".equals(directoryPath)) {
+                System.out.println(ConsoleColors.RED + "Operación cancelada. Volviendo al menú." + ConsoleColors.BLACK);
+                break;
+            }
+
+            System.out.println("selecciona el directorio del archivo desde la ventana..");
+            System.out.print("Coloca el nombre del archivo sin la extension: " + ConsoleColors.RED);
             String name = scan.nextLine();
-            adressList.exportAdressBook(directoryPath +"\\"+name+".txt");
+            adressList.exportAdressBook(directoryPath + "\\" + name + ".txt");
             System.out.print(
                     "volver al menu? " + ConsoleColors.RED + " [si]" + ConsoleColors.BLACK
                             + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
@@ -296,6 +320,7 @@ public class Menu {
 
             }
         }
+
     }
 
     private boolean regexComparation(String regexExpresion, String string) {
@@ -303,7 +328,11 @@ public class Menu {
 
     }
 
-
+    public void interrupt() {
+        if (Thread.currentThread().isInterrupted()) {
+            Thread.interrupted();
+        }
+    }
 
     private void options() {
         System.out.println("=============================================");
@@ -336,12 +365,12 @@ public class Menu {
                 ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
         String option = "a";
         while (true) {
-                options();
-                System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
-                option = scan.nextLine();
-                System.out.println(ConsoleColors.BLACK);
-                AdressBook adressList = new AdressBook();
-                switch (option) {
+            options();
+            System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
+            option = scan.nextLine();
+            System.out.println(ConsoleColors.BLACK);
+            AdressBook adressList = new AdressBook();
+            switch (option) {
                 case "a":
                     toFileUpload(adressList);
                     break;
@@ -359,7 +388,7 @@ public class Menu {
                     break;
                 case "f":
                     toExport(adressList);
-                        break;
+                    break;
                 case "g":
                     toExit();
                 default:

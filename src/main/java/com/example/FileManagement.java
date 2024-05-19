@@ -7,8 +7,6 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 public class FileManagement {
-    
-    
     public static String openFileViaExplorer() {
         final String[] filePath = { "" };
 
@@ -24,7 +22,7 @@ public class FileManagement {
                     File selectedFile = fileChooser.getSelectedFile();
                     filePath[0] = selectedFile.getAbsolutePath();
                 } else {
-                    filePath[0] = "";
+                    filePath[0] = "CANCELLED";
                 }
             }
         });
@@ -38,11 +36,15 @@ public class FileManagement {
             }
         }
 
+        if ("CANCELLED".equals(filePath[0])) {
+            Thread.currentThread().interrupt();
+        }
+
         return filePath[0];
     }
 
     public static String openDirectoryViaExplorer() {
-        final String[] directoryPath = { "" };
+        final String[] filePath = { "" };
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -54,15 +56,15 @@ public class FileManagement {
                 int result = fileChooser.showOpenDialog(null);
 
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedDirectory = fileChooser.getSelectedFile();
-                    directoryPath[0] = selectedDirectory.getAbsolutePath();
+                    File selectedFile = fileChooser.getSelectedFile();
+                    filePath[0] = selectedFile.getAbsolutePath();
                 } else {
-                    directoryPath[0] = "";
+                    filePath[0] = "CANCELLED";
                 }
             }
         });
 
-        while (directoryPath[0].isEmpty()) {
+        while (filePath[0].isEmpty()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -71,7 +73,11 @@ public class FileManagement {
             }
         }
 
-        return directoryPath[0];
+        if ("CANCELLED".equals(filePath[0])) {
+            Thread.currentThread().interrupt();
+        }
+
+        return filePath[0];
     }
 
     public static ArrayList<AdressEntry> fileUploadToArraylist(String path) throws FileNotFoundException {
