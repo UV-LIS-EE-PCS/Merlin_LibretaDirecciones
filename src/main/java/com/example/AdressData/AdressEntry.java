@@ -1,5 +1,4 @@
-package com.example;
-
+package com.example.AdressData;
 public class AdressEntry {
     private String name;
     private String lastName;

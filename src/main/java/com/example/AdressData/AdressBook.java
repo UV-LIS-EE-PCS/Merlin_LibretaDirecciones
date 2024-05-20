@@ -1,5 +1,5 @@
-package com.example;
-
+package com.example.AdressData;
+import com.example.utilities.*;
 import java.util.ArrayList;
 import java.io.*;
 import de.vandermeer.asciitable.AsciiTable;
@@ -8,9 +8,13 @@ public class AdressBook {
     private ArrayList<AdressEntry> listAdress;
 
     public AdressBook() throws FileNotFoundException {
-        String path = "src/main/java/com/example/Contactos.txt";
-        ArrayList<AdressEntry> Adress = FileManagement.fileUploadToArraylist(path);
-        listAdress = new ArrayList<>(Adress);
+        try {
+            String path = "src/main/java/com/example/info/Contactos.txt";
+            ArrayList<AdressEntry> Adress = FileManagement.fileUploadToArraylist(path);
+            listAdress = new ArrayList<>(Adress);
+        } catch (Exception e) {
+            System.out.println(ConsoleColors.RED+"Archivo no encontrado"+ConsoleColors.BLACK);
+        }
     }
 
     public boolean addAddress(AdressEntry entry) {
@@ -109,7 +113,7 @@ public class AdressBook {
     }
 
     public void exportAdressBook(String destinationPath) {
-        String initialPath = "src/main/java/com/example/Contactos.txt";
+        String initialPath = "src/main/java/com/example/info/Contactos.txt";
         FileManagement.copyFile(initialPath, destinationPath);
     }
 

@@ -1,5 +1,5 @@
-package com.example;
-
+package com.example.utilities;
+import com.example.AdressData.*;
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class FileManagement {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFileChooser fileChooser = new JFileChooser("src/main/java/com/example/Contactos.txt");
+                JFileChooser fileChooser = new JFileChooser("src/main/java/com/example/info/Contactos.txt");
                 fileChooser.setDialogTitle("Select File");
 
                 int result = fileChooser.showOpenDialog(null);
@@ -112,7 +112,7 @@ public class FileManagement {
     }
 
     public static void writeAdressToFile(AdressEntry entry) {
-        String nombreArchivo = "src/main/java/com/example/Contactos.txt";
+        String nombreArchivo = "src/main/java/com/example/info/Contactos.txt";
         try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(nombreArchivo, true))) {
             bufferEscritor.write(entry.getName() + "\n");
             bufferEscritor.write(entry.getLastName() + "\n");
@@ -130,7 +130,7 @@ public class FileManagement {
     }
 
     public static void replaceArraylistToContacts(ArrayList<AdressEntry> list) {
-        emptyFile("src/main/java/com/example/Contactos.txt");
+        emptyFile("src/main/java/com/example/info/Contactos.txt");
         for (AdressEntry adressToWrite : list) {
             writeAdressToFile(adressToWrite);
         }

@@ -1,4 +1,5 @@
-package com.example;
+package com.example.utilities;
+
 
 public class ConsoleColors {
     // Reset

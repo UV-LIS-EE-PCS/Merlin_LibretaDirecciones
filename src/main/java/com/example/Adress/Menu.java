@@ -1,5 +1,6 @@
-package com.example;
-
+package com.example.Adress;
+import com.example.AdressData.*;
+import com.example.utilities.*;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
