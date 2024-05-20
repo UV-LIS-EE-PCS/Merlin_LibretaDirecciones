@@ -204,9 +204,9 @@ public class Menu {
             String exit = scan.nextLine();
             System.out.println(ConsoleColors.BLACK);
             switch (exit) {
-                case "si":
-                    isCorrect = true;
                 case "no":
+                    isCorrect = true;
+                case "si":
                     break;
                 default:
                     System.out.println(
@@ -281,7 +281,7 @@ public class Menu {
             option = scan.nextLine();
             System.out.println(ConsoleColors.BLACK);
             AdressBook adressList = new AdressBook();
-            String backToMenu = "¿volver al menu?";
+            String backToMenu = "¿Repetir accion?";
             switch (option) {
                 case "a":
                     exitToMenu(() -> {

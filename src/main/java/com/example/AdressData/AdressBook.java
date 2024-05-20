@@ -13,7 +13,7 @@ public class AdressBook {
             ArrayList<AdressEntry> Adress = FileManagement.fileUploadToArraylist(path);
             listAdress = new ArrayList<>(Adress);
         } catch (Exception e) {
-            System.out.println(ConsoleColors.RED+"Archivo no encontrado"+ConsoleColors.BLACK);
+            System.out.println(ConsoleColors.RED+"Archivo de Contactos no encontrado"+ConsoleColors.BLACK);
         }
     }
 
