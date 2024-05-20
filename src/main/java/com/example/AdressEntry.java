@@ -29,6 +29,24 @@ public class AdressEntry {
                 + "\n" + "telefono = " + phone;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
+        if (object.getClass() != this.getClass()) {
+            return false;
+        }
+        AdressEntry compare = (AdressEntry) object;
+        return compare.name.strip().toLowerCase().equals(name.strip().toLowerCase()) &&
+                compare.lastName.strip().toLowerCase().equals(lastName.strip().toLowerCase()) &&
+                compare.street.strip().toLowerCase().equals(street.strip().toLowerCase()) &&
+                compare.state.strip().toLowerCase().equals(state.strip().toLowerCase()) &&
+                compare.postalCode.strip().toLowerCase().equals(postalCode.strip().toLowerCase()) &&
+                compare.email.strip().toLowerCase().equals(email.strip().toLowerCase()) &&
+                compare.phone.strip().toLowerCase().equals(phone.strip().toLowerCase());
+    }
+
     public String getName() {
         return name;
     }

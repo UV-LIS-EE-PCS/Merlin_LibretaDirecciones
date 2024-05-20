@@ -1,9 +1,5 @@
 package com.example;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.io.*;
 import de.vandermeer.asciitable.AsciiTable;
@@ -21,7 +17,7 @@ public class AdressBook {
         boolean isDuplicate = false;
 
         for (AdressEntry address : listAdress) {
-            if (address.toString().equals(entry.toString())) {
+            if (address.equals(entry)) {
                 AsciiTable at = new AsciiTable();
                 at.setPaddingLeftRight(1, 1);
                 at.addRule();
