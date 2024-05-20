@@ -5,6 +5,10 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class FileManagement {
     public static String openFileViaExplorer() {
@@ -13,7 +17,7 @@ public class FileManagement {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFileChooser fileChooser = new JFileChooser();
+                JFileChooser fileChooser = new JFileChooser("src/main/java/com/example/Contactos.txt");
                 fileChooser.setDialogTitle("Select File");
 
                 int result = fileChooser.showOpenDialog(null);
@@ -129,6 +133,17 @@ public class FileManagement {
         emptyFile("src/main/java/com/example/Contactos.txt");
         for (AdressEntry adressToWrite : list) {
             writeAdressToFile(adressToWrite);
+        }
+    }
+
+    public static void copyFile(String initialPath, String finalPath) {
+        Path sourcePath = Paths.get(initialPath);
+        Path destinationPath = Paths.get(finalPath);
+        try {
+            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println(ConsoleColors.PURPLE + "El archivo ha sido copiado con exito." + ConsoleColors.BLACK);
+        } catch (IOException e) {
+            System.err.println("Error al copiar el archivo: " + e.getMessage());
         }
     }
 

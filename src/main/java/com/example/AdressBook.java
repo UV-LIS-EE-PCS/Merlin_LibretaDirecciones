@@ -112,15 +112,9 @@ public class AdressBook {
         }
     }
 
-    public void exportAdressBook(String path) {
-        Path sourcePath = Paths.get("src/main/java/com/example/Contactos.txt");
-        Path destinationPath = Paths.get(path);
-        try {
-            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            System.out.println(ConsoleColors.PURPLE + "El archivo ha sido copiado con exito." + ConsoleColors.BLACK);
-        } catch (IOException e) {
-            System.err.println("Error al copiar el archivo: " + e.getMessage());
-        }
+    public void exportAdressBook(String destinationPath) {
+        String initialPath = "src/main/java/com/example/Contactos.txt";
+        FileManagement.copyFile(initialPath, destinationPath);
     }
 
     public ArrayList<AdressEntry> filterAdress(String search) {
