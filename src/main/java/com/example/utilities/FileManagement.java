@@ -1,14 +1,16 @@
 package com.example.utilities;
 import com.example.AdressData.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
+
 
 public class FileManagement {
     public static String openFileViaExplorer() {
@@ -17,7 +19,7 @@ public class FileManagement {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFileChooser fileChooser = new JFileChooser("src/main/java/com/example/info/Contactos.txt");
+                JFileChooser fileChooser = new JFileChooser("src/main/java/com/example/info/");
                 fileChooser.setDialogTitle("Select File");
 
                 int result = fileChooser.showOpenDialog(null);
@@ -84,7 +86,7 @@ public class FileManagement {
         return filePath[0];
     }
 
-    public static ArrayList<AdressEntry> fileUploadToArraylist(String path) throws FileNotFoundException {
+    public static ArrayList<AdressEntry> txtUploadToArraylist(String path) throws FileNotFoundException {
         File file = new File(path);
         Scanner scan = new Scanner(file);
         int lineText = 0;
@@ -111,9 +113,11 @@ public class FileManagement {
         return listToUpload;
     }
 
-    public static void writeAdressToFile(AdressEntry entry) {
-        String nombreArchivo = "src/main/java/com/example/info/Contactos.txt";
-        try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(nombreArchivo, true))) {
+
+
+
+    public static void writeAdressToFile(AdressEntry entry,String path) {
+        try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(path, true))) {
             bufferEscritor.write(entry.getName() + "\n");
             bufferEscritor.write(entry.getLastName() + "\n");
             bufferEscritor.write(entry.getStreet() + "\n");
@@ -129,29 +133,44 @@ public class FileManagement {
         }
     }
 
-    public static void replaceArraylistToContacts(ArrayList<AdressEntry> list) {
-        emptyFile("src/main/java/com/example/info/Contactos.txt");
-        for (AdressEntry adressToWrite : list) {
-            writeAdressToFile(adressToWrite);
+    public static String readFile(String path){
+        try(Reader reader = new FileReader(path)){
+            int valor=reader.read();
+            String json = "";
+            while(valor!=-1){
+                json+=(char)valor;
+                valor=reader.read();
+            }
+            //Cerramos el stream
+            reader.close();
+            return json;
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    } 
+    
+    public static ArrayList<AdressEntry> JsonFileToArrayList(String path){
+        String json = readFile(path);
+        Gson gson = new Gson();
+        Type userListType = new TypeToken<ArrayList<AdressEntry>>(){}.getType();
+        if(json.isEmpty()){
+            return new ArrayList<AdressEntry>();
+        }else{
+            return gson.fromJson(json, userListType);
+
+        }
+    }
+ 
+
+    public static void writeAddressOnJsonFile(String path,ArrayList<AdressEntry> list){
+        try (Writer writer = new FileWriter(path)){
+            Gson gson = new Gson();
+            gson.toJson(list,writer);
+        } catch (IOException e) {
+            throw new RuntimeException(e); 
         }
     }
 
-    public static void copyFile(String initialPath, String finalPath) {
-        Path sourcePath = Paths.get(initialPath);
-        Path destinationPath = Paths.get(finalPath);
-        try {
-            Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            System.out.println(ConsoleColors.PURPLE + "El archivo ha sido copiado con exito." + ConsoleColors.BLACK);
-        } catch (IOException e) {
-            System.err.println("Error al copiar el archivo: " + e.getMessage());
-        }
-    }
 
-    public static void emptyFile(String filePath) {
-        try (FileOutputStream fos = new FileOutputStream(new File(filePath))) {
-            // truncate file
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

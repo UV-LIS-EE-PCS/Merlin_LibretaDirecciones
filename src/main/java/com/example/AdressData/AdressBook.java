@@ -9,10 +9,11 @@ public class AdressBook {
 
     public AdressBook() throws FileNotFoundException {
         try {
-            String path = "src/main/java/com/example/info/Contactos.txt";
-            ArrayList<AdressEntry> Adress = FileManagement.fileUploadToArraylist(path);
+            String path = "src/main/java/com/example/info/contactos.json";
+            ArrayList<AdressEntry> Adress = FileManagement.JsonFileToArrayList(path);
             listAdress = new ArrayList<>(Adress);
         } catch (Exception e) {
+            System.out.println(e);
             System.out.println(ConsoleColors.RED+"Archivo de Contactos no encontrado"+ConsoleColors.BLACK);
         }
     }
@@ -38,7 +39,7 @@ public class AdressBook {
 
         if (!isDuplicate) {
             listAdress.add(entry);
-            FileManagement.writeAdressToFile(entry);
+            FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
 
             return isDuplicate;
         }
@@ -51,7 +52,7 @@ public class AdressBook {
         } else {
             AdressEntry entry = listAdress.get(index);
             listAdress.remove(entry);
-            FileManagement.replaceArraylistToContacts(listAdress);
+            FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
         }
     }
 
@@ -60,7 +61,7 @@ public class AdressBook {
             System.out.println("lista vacia");
         } else {
             listAdress.remove(entry);
-            FileManagement.replaceArraylistToContacts(listAdress);
+            FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
         }
     }
 
@@ -100,7 +101,7 @@ public class AdressBook {
     }
 
     public void uploadAdressFromFile(String path) throws FileNotFoundException {
-        ArrayList<AdressEntry> newAdressList = FileManagement.fileUploadToArraylist(path);
+        ArrayList<AdressEntry> newAdressList = FileManagement.txtUploadToArraylist(path);
         if (newAdressList.isEmpty()) {
             System.out.println(ConsoleColors.CYAN + "archivo invalido" + ConsoleColors.BLACK);
 
@@ -113,8 +114,14 @@ public class AdressBook {
     }
 
     public void exportAdressBook(String destinationPath) {
-        String initialPath = "src/main/java/com/example/info/Contactos.txt";
-        FileManagement.copyFile(initialPath, destinationPath);
+        try {
+            for(AdressEntry entry:listAdress){
+                FileManagement.writeAdressToFile(entry, destinationPath);
+            }
+            System.out.println(ConsoleColors.PURPLE+"Archivo importado con exito"+ConsoleColors.BLACK);
+        } catch (Exception e) {
+            System.out.println("no se logró exportar el archivo");
+        }
     }
 
     public ArrayList<AdressEntry> filterAdress(String search) {

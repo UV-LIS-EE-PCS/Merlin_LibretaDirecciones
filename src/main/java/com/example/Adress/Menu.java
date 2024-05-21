@@ -275,12 +275,12 @@ public class Menu {
         System.out.println(
                 ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
         String option = "a";
+        AdressBook adressList = new AdressBook();
         while (true) {
             options();
             System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
             option = scan.nextLine();
             System.out.println(ConsoleColors.BLACK);
-            AdressBook adressList = new AdressBook();
             String backToMenu = "¿Repetir accion?";
             switch (option) {
                 case "a":
