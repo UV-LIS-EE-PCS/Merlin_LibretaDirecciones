@@ -46,16 +46,7 @@ public class AdressBook {
         return isDuplicate;
     }
 
-    public void deleteAdress(int index) {
-        if (listAdress.isEmpty()) {
-            System.out.println("lista vacia");
-        } else {
-            AdressEntry entry = listAdress.get(index);
-            listAdress.remove(entry);
-            FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
-        }
-    }
-
+    
     public void deleteAdress(AdressEntry entry) {
         if (listAdress.isEmpty()) {
             System.out.println("lista vacia");

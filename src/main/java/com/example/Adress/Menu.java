@@ -8,13 +8,22 @@ import java.util.regex.Pattern;
 
 public class Menu {
     private Scanner scan = new Scanner(System.in);
+    private AdressBook adressList;
+
+    public Menu() {
+        try {
+            this.adressList = new AdressBook(); 
+        } catch (Exception e) {
+            System.out.println("Error al cargar el archivo contactos.json");
+        }
+    }
 
     @FunctionalInterface
     interface Function {
         void execute();
     }
 
-    private void toSearch(AdressBook adressList) {
+    private void toSearch() {
 
         System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
         String search = scan.nextLine();
@@ -22,7 +31,7 @@ public class Menu {
 
     }
 
-    private void toAdd(AdressBook adressList) {
+    private void toAdd() {
 
         boolean isCorrectEntry = false;
         String name = "no data", lastName = "no data", street = "no data", state = "no data", postalCode = "no data",
@@ -81,7 +90,7 @@ public class Menu {
 
     }
 
-    private void toFileUpload(AdressBook addressList) throws FileNotFoundException {
+    private void toFileUpload() throws FileNotFoundException {
 
         System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
         String path = FileManagement.openFileViaExplorer();
@@ -92,7 +101,7 @@ public class Menu {
         }
 
         try {
-            addressList.uploadAdressFromFile(path);
+            this.adressList.uploadAdressFromFile(path);
         } catch (FileNotFoundException e) {
             System.out.println(
                     ConsoleColors.RED + "Archivo no encontrado. Inténtalo de nuevo." + ConsoleColors.BLACK);
@@ -126,7 +135,7 @@ public class Menu {
         }
     }
 
-    private void toDelete(AdressBook adressList) {
+    private void toDelete() {
 
         System.out.print(ConsoleColors.CYAN_BOLD + "¿Qué registro deseas eliminar?: " + ConsoleColors.RED);
         String search = scan.nextLine();
@@ -217,7 +226,7 @@ public class Menu {
         }
     }
 
-    private void toExport(AdressBook adressList) {
+    private void toExport() {
 
         System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
         String directoryPath = FileManagement.openDirectoryViaExplorer();
@@ -275,7 +284,6 @@ public class Menu {
         System.out.println(
                 ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
         String option = "a";
-        AdressBook adressList = new AdressBook();
         while (true) {
             options();
             System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
@@ -286,7 +294,7 @@ public class Menu {
                 case "a":
                     exitToMenu(() -> {
                         try {
-                            toFileUpload(adressList);
+                            toFileUpload();
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -295,17 +303,17 @@ public class Menu {
                     break;
                 case "b":
                     exitToMenu(() -> {
-                        toAdd(adressList);
+                        toAdd();
                     }, backToMenu);
                     break;
                 case "c":
                     exitToMenu(() -> {
-                        toDelete(adressList);
+                        toDelete();
                     }, backToMenu);
                     break;
                 case "d":
                     exitToMenu(() -> {
-                        toSearch(adressList);
+                        toSearch();
                     }, backToMenu);
                     break;
                 case "e":
@@ -315,7 +323,7 @@ public class Menu {
                     break;
                 case "f":
                     exitToMenu(() -> {
-                        toExport(adressList);
+                        toExport();
                     }, backToMenu);
                     interrupt();
                     break;
