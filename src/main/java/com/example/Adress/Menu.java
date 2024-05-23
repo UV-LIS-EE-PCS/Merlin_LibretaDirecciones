@@ -8,11 +8,19 @@ import java.util.regex.Pattern;
 
 public class Menu {
     private Scanner scan = new Scanner(System.in);
-    private AdressBook adressList;
+    private AdressBook book;
 
     public Menu() {
         try {
-            this.adressList = new AdressBook(); 
+            this.book = new AdressBook(); 
+        } catch (Exception e) {
+            System.out.println("Error al cargar el archivo contactos.json");
+        }
+    }
+    
+    public Menu(AdressBook book) {
+        try {
+            this.book = book; 
         } catch (Exception e) {
             System.out.println("Error al cargar el archivo contactos.json");
         }
@@ -27,7 +35,7 @@ public class Menu {
 
         System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
         String search = scan.nextLine();
-        adressList.searchAdress(search);
+        book.searchAdress(search);
 
     }
 
@@ -84,7 +92,7 @@ public class Menu {
         }
 
         AdressEntry newEntry = new AdressEntry(name, lastName, street, state, postalCode, email, phone);
-        adressList.addAddress(newEntry);
+        book.addAddress(newEntry);
         System.out.println(
                 "\n~" + ConsoleColors.PURPLE_BOLD + "+Dirección agregada con exito!" + ConsoleColors.BLACK);
 
@@ -101,7 +109,7 @@ public class Menu {
         }
 
         try {
-            this.adressList.uploadAdressFromFile(path);
+            this.book.uploadAdressFromFile(path);
         } catch (FileNotFoundException e) {
             System.out.println(
                     ConsoleColors.RED + "Archivo no encontrado. Inténtalo de nuevo." + ConsoleColors.BLACK);
@@ -141,14 +149,14 @@ public class Menu {
         String search = scan.nextLine();
 
         // Filtrar direcciones que coinciden con la búsqueda
-        ArrayList<AdressEntry> adressToDelete = adressList.filterAdress(search);
+        ArrayList<AdressEntry> adressToDelete = book.filterAdress(search);
         if(adressToDelete.size()==1){
             AdressEntry entry = adressToDelete.get(0);
             System.out.print(ConsoleColors.BLACK+"Deseas eliminar este registro?\n"+entry.toString()+" \nescribe "+ConsoleColors.BLUE+"si para aceptar y "+ConsoleColors.BLACK+ConsoleColors.RED+"cualquier otra cadena para cancelar"+ConsoleColors.BLACK+": ");
             String cancel = scan.nextLine();
             if(cancel.equalsIgnoreCase("si")){
                 System.out.println();
-                adressList.deleteAdress(entry);
+                book.deleteAdress(entry);
                 System.out.println(ConsoleColors.YELLOW_BOLD + entry.getName()+" "+entry.getLastName()
                 + ConsoleColors.RED_BOLD + " eliminado correctamente"+ConsoleColors.BLACK);
             }else{
@@ -176,7 +184,7 @@ public class Menu {
                     // Eliminar todas las coincidencias
                     System.out.println(ConsoleColors.PURPLE + "Registros eliminados:" + ConsoleColors.BLACK);
                     for (AdressEntry entry : adressToDelete) {
-                        adressList.deleteAdress(entry);
+                        book.deleteAdress(entry);
                         System.out.println(ConsoleColors.YELLOW_BOLD+entry.getName()+" " +entry.getLastName()+ConsoleColors.BLACK);
                     }
                     break;
@@ -191,7 +199,7 @@ public class Menu {
                             int index = Integer.parseInt(indexRemove);
                             if (index >= 0 && index < adressToDelete.size()) {
                                 AdressEntry entry = adressToDelete.get(index);
-                                adressList.deleteAdress(entry);
+                                book.deleteAdress(entry);
                                 System.out.println(ConsoleColors.YELLOW_BOLD + index + "." + entry.getName()+" "+entry.getLastName()
                                         + ConsoleColors.RED_BOLD + " eliminado correctamente"+ConsoleColors.BLACK);
                             } else {
@@ -209,9 +217,9 @@ public class Menu {
 
     }
 
-    private void toShow(AdressBook adressList) {
+    private void toShow(AdressBook book) {
 
-        adressList.showAdress();
+        book.showAdress();
 
     }
 
@@ -251,7 +259,7 @@ public class Menu {
         System.out.println("selecciona el directorio del archivo desde la ventana..");
         System.out.print("Coloca el nombre del archivo sin la extension: " + ConsoleColors.RED);
         String name = scan.nextLine();
-        adressList.exportAdressBook(directoryPath + "\\" + name + ".txt");
+        book.exportAdressBook(directoryPath + "\\" + name + ".txt");
 
     }
 
@@ -330,7 +338,7 @@ public class Menu {
                     break;
                 case "e":
                     exitToMenu(() -> {
-                        toShow(adressList);
+                        toShow(book);
                     }, backToMenu);
                     break;
                 case "f":
