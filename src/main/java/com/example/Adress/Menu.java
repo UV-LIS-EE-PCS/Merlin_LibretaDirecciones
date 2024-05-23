@@ -31,7 +31,7 @@ public class Menu {
         void execute();
     }
 
-    private void toSearch() {
+    public void toSearch() {
 
         System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
         String search = scan.nextLine();
@@ -39,7 +39,7 @@ public class Menu {
 
     }
 
-    private void toAdd() {
+    public void toAdd() {
 
         boolean isCorrectEntry = false;
         String name = "no data", lastName = "no data", street = "no data", state = "no data", postalCode = "no data",
@@ -98,7 +98,7 @@ public class Menu {
 
     }
 
-    private void toFileUpload() throws FileNotFoundException {
+    public void toFileUpload() throws FileNotFoundException {
 
         System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
         String path = FileManagement.openFileViaExplorer();
@@ -118,7 +118,7 @@ public class Menu {
 
     }
 
-    private void toExit() {
+    public void toExit() {
         boolean isCorrect = false;
         while (!isCorrect) {
             System.out.print(
@@ -143,7 +143,7 @@ public class Menu {
         }
     }
 
-    private void toDelete() {
+    public void toDelete() {
 
         System.out.print(ConsoleColors.CYAN_BOLD + "¿Qué registro deseas eliminar?: " + ConsoleColors.RED);
         String search = scan.nextLine();
@@ -217,7 +217,7 @@ public class Menu {
 
     }
 
-    private void toShow(AdressBook book) {
+    public void toShow() {
 
         book.showAdress();
 
@@ -246,8 +246,10 @@ public class Menu {
         }
     }
 
-    private void toExport() {
+    public void toExport() {
 
+        System.out.print("Coloca el nombre del archivo sin la extension: " + ConsoleColors.RED);
+        String name = scan.nextLine();
         System.out.println(ConsoleColors.CYAN + "Selecciona la ruta del archivo por la ventana");
         String directoryPath = FileManagement.openDirectoryViaExplorer();
 
@@ -256,9 +258,7 @@ public class Menu {
             return;
         }
 
-        System.out.println("selecciona el directorio del archivo desde la ventana..");
-        System.out.print("Coloca el nombre del archivo sin la extension: " + ConsoleColors.RED);
-        String name = scan.nextLine();
+        System.out.println("selecciona el directorio del archivo desde la ventana...");
         book.exportAdressBook(directoryPath + "\\" + name + ".txt");
 
     }
@@ -274,13 +274,13 @@ public class Menu {
         }
     }
 
-    private void options() {
+    public void displayMenu() {
         System.out.println("=============================================");
         System.out.println(
-                "|           " + ConsoleColors.PURPLE_BOLD + "Selecciona una opcion" + ConsoleColors.BLACK
+                "|           " + ConsoleColors.GREEN_BOLD + "Selecciona una opcion" + ConsoleColors.BLACK
                         + "           |");
         System.out.println("=============================================");
-        System.out.println("|           " + ConsoleColors.PURPLE_BRIGHT + "Opciones:" + ConsoleColors.BLACK
+        System.out.println("|           " + ConsoleColors.GREEN_BRIGHT + "Opciones:" + ConsoleColors.BLACK
                 + "                       |");
         System.out.println(
                 "|                    " + ConsoleColors.YELLOW + "(a)" + ConsoleColors.BLACK + " Cargar archivo     |");
@@ -300,62 +300,62 @@ public class Menu {
         System.out.println("=============================================");
     }
 
-    public void displayMenu() throws FileNotFoundException {
-        System.out.println(
-                ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
-        String option = "a";
-        while (true) {
-            options();
-            System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
-            option = scan.nextLine();
-            System.out.println(ConsoleColors.BLACK);
-            String backToMenu = "¿Repetir accion?";
-            switch (option.toLowerCase()) {
-                case "a":
-                    exitToMenu(() -> {
-                        try {
-                            toFileUpload();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }, backToMenu);
-                    interrupt();
-                    break;
-                case "b":
-                    exitToMenu(() -> {
-                        toAdd();
-                    }, backToMenu);
-                    break;
-                case "c":
-                    exitToMenu(() -> {
-                        toDelete();
-                    }, backToMenu);
-                    break;
-                case "d":
-                    exitToMenu(() -> {
-                        toSearch();
-                    }, backToMenu);
-                    break;
-                case "e":
-                    exitToMenu(() -> {
-                        toShow(book);
-                    }, backToMenu);
-                    break;
-                case "f":
-                    exitToMenu(() -> {
-                        toExport();
-                    }, backToMenu);
-                    interrupt();
-                    break;
-                case "g":
-                    toExit();
-                    continue;
-                default:
-                    System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" +
-                            ConsoleColors.BLACK);
-                    break;
-            }
-        }
-    }
+    // public void s() throws FileNotFoundException {
+    //     System.out.println(
+    //             ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
+    //     String option = "a";
+    //     while (true) {
+    //         options();
+    //         System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
+    //         option = scan.nextLine();
+    //         System.out.println(ConsoleColors.BLACK);
+    //         String backToMenu = "¿Repetir accion?";
+    //         switch (option.toLowerCase()) {
+    //             case "a":
+    //                 exitToMenu(() -> {
+    //                     try {
+    //                         toFileUpload();
+    //                     } catch (FileNotFoundException e) {
+    //                         e.printStackTrace();
+    //                     }
+    //                 }, backToMenu);
+    //                 interrupt();
+    //                 break;
+    //             case "b":
+    //                 exitToMenu(() -> {
+    //                     toAdd();
+    //                 }, backToMenu);
+    //                 break;
+    //             case "c":
+    //                 exitToMenu(() -> {
+    //                     toDelete();
+    //                 }, backToMenu);
+    //                 break;
+    //             case "d":
+    //                 exitToMenu(() -> {
+    //                     toSearch();
+    //                 }, backToMenu);
+    //                 break;
+    //             case "e":
+    //                 exitToMenu(() -> {
+    //                     toShow(book);
+    //                 }, backToMenu);
+    //                 break;
+    //             case "f":
+    //                 exitToMenu(() -> {
+    //                     toExport();
+    //                 }, backToMenu);
+    //                 interrupt();
+    //                 break;
+    //             case "g":
+    //                 toExit();
+    //                 continue;
+    //             default:
+    //                 System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" +
+    //                         ConsoleColors.BLACK);
+    //                 break;
+    //         }
+    //     }
+    
 
 }
