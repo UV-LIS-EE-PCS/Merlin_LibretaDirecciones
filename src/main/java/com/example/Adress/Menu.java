@@ -142,7 +142,20 @@ public class Menu {
 
         // Filtrar direcciones que coinciden con la búsqueda
         ArrayList<AdressEntry> adressToDelete = adressList.filterAdress(search);
-        if (!adressToDelete.isEmpty()) {
+        if(adressToDelete.size()==1){
+            AdressEntry entry = adressToDelete.get(0);
+            System.out.print(ConsoleColors.BLACK+"Deseas eliminar este registro?\n"+entry.toString()+" \nescribe "+ConsoleColors.BLUE+"si para aceptar y "+ConsoleColors.BLACK+ConsoleColors.RED+"cualquier otra cadena para cancelar"+ConsoleColors.BLACK+": ");
+            String cancel = scan.nextLine();
+            if(cancel.equalsIgnoreCase("si")){
+                System.out.println();
+                adressList.deleteAdress(entry);
+                System.out.println(ConsoleColors.YELLOW_BOLD + entry.getName()+" "+entry.getLastName()
+                + ConsoleColors.RED_BOLD + " eliminado correctamente"+ConsoleColors.BLACK);
+            }else{
+                System.out.println(ConsoleColors.BLUE+"operacion cancelada"+ConsoleColors.BLACK);
+            }
+        }
+        else if (!adressToDelete.isEmpty()) {
             System.out.println(ConsoleColors.CYAN_BOLD + "Coincidencias:");
             for (AdressEntry entry : adressToDelete) {
                 System.out.println(ConsoleColors.BLUE + adressToDelete.indexOf(entry) + ConsoleColors.BLACK + "."
@@ -158,14 +171,13 @@ public class Menu {
                     + "\nCancelar" + ConsoleColors.PURPLE_BOLD + " [c]" + ConsoleColors.RED_BOLD);
             System.out.print("$ " + ConsoleColors.RED);
             String deleteOption = scan.nextLine();
-
             switch (deleteOption) {
                 case "e":
                     // Eliminar todas las coincidencias
                     System.out.println(ConsoleColors.PURPLE + "Registros eliminados:" + ConsoleColors.BLACK);
                     for (AdressEntry entry : adressToDelete) {
                         adressList.deleteAdress(entry);
-                        System.out.println(entry.getName());
+                        System.out.println(ConsoleColors.YELLOW_BOLD+entry.getName()+" " +entry.getLastName()+ConsoleColors.BLACK);
                     }
                     break;
                 case "c":
@@ -180,8 +192,8 @@ public class Menu {
                             if (index >= 0 && index < adressToDelete.size()) {
                                 AdressEntry entry = adressToDelete.get(index);
                                 adressList.deleteAdress(entry);
-                                System.out.println(ConsoleColors.BLACK + index + "." + entry.getName()
-                                        + ConsoleColors.PURPLE + " eliminado correctamente" + ConsoleColors.BLACK);
+                                System.out.println(ConsoleColors.YELLOW_BOLD + index + "." + entry.getName()+" "+entry.getLastName()
+                                        + ConsoleColors.RED_BOLD + " eliminado correctamente"+ConsoleColors.BLACK);
                             } else {
                                 System.out.println("Índice fuera de los límites: " + index);
                             }
@@ -192,7 +204,7 @@ public class Menu {
                     break;
             }
         } else {
-            System.out.println("No se encontraron coincidencias.");
+            System.out.println(ConsoleColors.BLACK+"No se encontraron coincidencias.");
         }
 
     }
@@ -290,7 +302,7 @@ public class Menu {
             option = scan.nextLine();
             System.out.println(ConsoleColors.BLACK);
             String backToMenu = "¿Repetir accion?";
-            switch (option) {
+            switch (option.toLowerCase()) {
                 case "a":
                     exitToMenu(() -> {
                         try {

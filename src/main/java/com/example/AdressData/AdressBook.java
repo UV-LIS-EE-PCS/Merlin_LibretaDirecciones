@@ -18,6 +18,11 @@ public class AdressBook {
         }
     }
 
+    public AdressBook(ArrayList<AdressEntry> listAdress){
+        this.listAdress = listAdress;
+        FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
+    }
+
     public boolean addAddress(AdressEntry entry) {
         boolean isDuplicate = false;
 
@@ -50,7 +55,10 @@ public class AdressBook {
     public void deleteAdress(AdressEntry entry) {
         if (listAdress.isEmpty()) {
             System.out.println("lista vacia");
-        } else {
+        }else if(listAdress.indexOf(entry)==-1){
+            System.out.println(ConsoleColors.CYAN+"no existe ese elemento en esta lista"+ConsoleColors.BLACK); 
+        }
+         else {
             listAdress.remove(entry);
             FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
         }
@@ -97,9 +105,13 @@ public class AdressBook {
             System.out.println(ConsoleColors.CYAN + "archivo invalido" + ConsoleColors.BLACK);
 
         } else {
+            boolean isRepeat;
             for (AdressEntry entry : newAdressList) {
-                addAddress(entry);
-
+                isRepeat = addAddress(entry);
+                if(!isRepeat){
+                    System.out.println(ConsoleColors.BLUE+"Contacto de nombre: "+ConsoleColors.BLUE_BOLD+entry.getName()+" "+entry.getLastName()+ConsoleColors.RED+" importado"+ConsoleColors.BLACK);
+                }
+                
             }
         }
     }
