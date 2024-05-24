@@ -1,4 +1,5 @@
 package com.example.AdressData;
+
 import com.example.utilities.*;
 import java.util.ArrayList;
 import java.io.*;
@@ -14,11 +15,11 @@ public class AdressBook {
             listAdress = new ArrayList<>(Adress);
         } catch (Exception e) {
             System.out.println(e);
-            System.out.println(ConsoleColors.RED+"Archivo de Contactos no encontrado"+ConsoleColors.BLACK);
+            System.out.println(ConsoleColors.RED + "Archivo de Contactos no encontrado" + ConsoleColors.BLACK);
         }
     }
 
-    public AdressBook(ArrayList<AdressEntry> listAdress){
+    public AdressBook(ArrayList<AdressEntry> listAdress) {
         this.listAdress = listAdress;
         FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
     }
@@ -51,43 +52,21 @@ public class AdressBook {
         return isDuplicate;
     }
 
-    
     public void deleteAdress(AdressEntry entry) {
         if (listAdress.isEmpty()) {
             System.out.println("lista vacia");
-        }else if(listAdress.indexOf(entry)==-1){
-            System.out.println(ConsoleColors.CYAN+"no existe ese elemento en esta lista"+ConsoleColors.BLACK); 
-        }
-         else {
+        } else if (listAdress.indexOf(entry) == -1) {
+            System.out.println(ConsoleColors.CYAN + "no existe ese elemento en esta lista" + ConsoleColors.BLACK);
+        } else {
             listAdress.remove(entry);
             FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
         }
     }
 
-    public void searchAdress(String search) {
+    public ArrayList<AdressEntry> searchAdress(String search) {
         ArrayList<AdressEntry> entryToDisplay = filterAdress(search);
-        if (entryToDisplay.isEmpty()) {
-            System.out.println(ConsoleColors.PURPLE + "No se encontró ninguna coincidecia");
-        } else {
-            System.out.println(ConsoleColors.PURPLE + "Resultados de la busqueda:" + ConsoleColors.BLACK + "\n");
-            AsciiTable dataText = new AsciiTable();
-            dataText.setPaddingLeftRight(1, 1);
-            dataText.addRule();
-            dataText.addRow("Nombre", "Apellido", "Calle", "Estado", "Codigo Postal", "Correo Electrónico", "Telefono");
-            int counterIndex = 0;
-            for (AdressEntry entry : entryToDisplay) {
-                String higlightText = highlightSearch(entry.getName().toLowerCase(), search.toLowerCase().strip());
-                System.out.println(higlightText + ConsoleColors.BLACK + "\n");
-                if (counterIndex == 0) {
-                    String rend = dataText.render(150);
-                    System.out.println(rend);
-                }
 
-                System.out.println(ConsoleColors.PURPLE + GenerateInfoTable(entry) + ConsoleColors.BLACK + "\n");
-                counterIndex++;
-
-            }
-        }
+        return entryToDisplay;
     }
 
     public void showAdress() {
@@ -108,20 +87,22 @@ public class AdressBook {
             boolean isRepeat;
             for (AdressEntry entry : newAdressList) {
                 isRepeat = addAddress(entry);
-                if(!isRepeat){
-                    System.out.println(ConsoleColors.BLUE+"Contacto de nombre: "+ConsoleColors.BLUE_BOLD+entry.getName()+" "+entry.getLastName()+ConsoleColors.RED+" importado"+ConsoleColors.BLACK);
+                if (!isRepeat) {
+                    System.out.println(ConsoleColors.BLUE + "Contacto de nombre: " + ConsoleColors.BLUE_BOLD
+                            + entry.getName() + " " + entry.getLastName() + ConsoleColors.RED + " importado"
+                            + ConsoleColors.BLACK);
                 }
-                
+
             }
         }
     }
 
     public void exportAdressBook(String destinationPath) {
         try {
-            for(AdressEntry entry:listAdress){
+            for (AdressEntry entry : listAdress) {
                 FileManagement.writeAdressToFile(entry, destinationPath);
             }
-            System.out.println(ConsoleColors.PURPLE+"Archivo importado con exito"+ConsoleColors.BLACK);
+            System.out.println(ConsoleColors.PURPLE + "Archivo importado con exito" + ConsoleColors.BLACK);
         } catch (Exception e) {
             System.out.println("no se logró exportar el archivo");
         }
@@ -159,10 +140,11 @@ public class AdressBook {
         return rend;
     }
 
-    private String GenerateInfoTable(AdressEntry entry) {
+    public String GenerateInfoTable(AdressEntry entry) {
 
         AsciiTable dataText = new AsciiTable();
-        dataText.setPaddingLeftRight(1, 1);
+        dataText.addRule();
+        dataText.addRow("Nombre", "Apellido", "Calle", "Estado", "Codigo Postal", "Correo Electrónico", "Telefono");
         dataText.addRule();
         dataText.addRow(entry.getName(), entry.getLastName(), entry.getStreet(), entry.getState(),
                 entry.getPostalCode(),

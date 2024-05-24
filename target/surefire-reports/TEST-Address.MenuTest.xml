@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="AddressData.AddressEntryTest" time="0.002" tests="14" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="Address.MenuTest" time="0.183" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,18 +58,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="getStateTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setLastNameTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="getStreetTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="getPhoneTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setPostalCodeTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setEmailTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setStreetTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setStateTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setNameTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="getNameTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="getPostalCodeTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="setPhoneTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="getLastNameTest" classname="AddressData.AddressEntryTest" time="0"/>
-  <testcase name="getEmailTest" classname="AddressData.AddressEntryTest" time="0"/>
+  <testcase name="toDeleteTestForMultipleRemove" classname="Address.MenuTest" time="0.102"/>
+  <testcase name="toDeleteTest" classname="Address.MenuTest" time="0.063"/>
+  <testcase name="toAddTest" classname="Address.MenuTest" time="0.004"/>
 </testsuite>

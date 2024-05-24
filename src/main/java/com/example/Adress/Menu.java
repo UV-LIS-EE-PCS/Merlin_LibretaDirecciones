@@ -1,4 +1,5 @@
 package com.example.Adress;
+
 import com.example.AdressData.*;
 import com.example.utilities.*;
 import java.util.Scanner;
@@ -7,20 +8,19 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Menu {
-    private Scanner scan = new Scanner(System.in);
     private AdressBook book;
 
     public Menu() {
         try {
-            this.book = new AdressBook(); 
+            this.book = new AdressBook();
         } catch (Exception e) {
             System.out.println("Error al cargar el archivo contactos.json");
         }
     }
-    
+
     public Menu(AdressBook book) {
         try {
-            this.book = book; 
+            this.book = book;
         } catch (Exception e) {
             System.out.println("Error al cargar el archivo contactos.json");
         }
@@ -31,15 +31,72 @@ public class Menu {
         void execute();
     }
 
-    public void toSearch() {
+    public void toSearch(Scanner scan) {
 
-        System.out.print(ConsoleColors.CYAN + "Ingresa el texto de busqueda: " + ConsoleColors.RED);
+        System.out.print(ConsoleColors.CYAN + "Ingresa el nombre de la direccion de busqueda: " + ConsoleColors.RED);
         String search = scan.nextLine();
-        book.searchAdress(search);
+        ArrayList<AdressEntry> addresslist = book.searchAdress(search);
+        if (addresslist.isEmpty()) {
+            System.out.println("sin resultados" + ConsoleColors.BLACK);
+        } else if (addresslist.size() == 1) {
+            System.out.println(ConsoleColors.PURPLE + "resultado:" + ConsoleColors.BLACK);
+            System.out.println(AdressBook.highlightSearch(addresslist.get(0).getName().toLowerCase(),
+                    search.toLowerCase().strip()));
+            System.out.println(
+                    ConsoleColors.GREEN_BOLD_BRIGHT + book.GenerateInfoTable(addresslist.get(0)) + ConsoleColors.BLACK);
+        } else {
+
+            showCompleteInformation(addresslist, scan, search);
+        }
 
     }
 
-    public void toAdd() {
+    private void showCompleteInformation(ArrayList<AdressEntry> addressList, Scanner scan, String search) {
+        boolean isComplete = false;
+        while (!isComplete) {
+            if (addressList.isEmpty()) {
+                return;
+            }
+            String coincidence = ConsoleColors.BLACK + "coincidencias: [";
+            for (int i = 0; i < addressList.size(); i++) {
+                AdressEntry entry = addressList.get(i);
+                String higlightText = AdressBook.highlightSearch(entry.getName().toLowerCase(),
+                        search.toLowerCase().strip());
+                if (i == addressList.size() - 1) {
+                    coincidence += i + "." + higlightText + ConsoleColors.BLACK + "']";
+                } else {
+                    coincidence += i + "." + higlightText + ConsoleColors.BLACK + ", ";
+                }
+
+            }
+            System.out.println(coincidence);
+            System.out
+                    .print(ConsoleColors.BLACK_BOLD + "ingresa el " + ConsoleColors.BLACK_UNDERLINED
+                            + "numero de la direcion" + ConsoleColors.BLACK
+                            + " para ver la informacion completa, " + ConsoleColors.BLACK_UNDERLINED
+                            + "coloca -1 para terminar" + ConsoleColors.BLACK + ": "
+                            + ConsoleColors.RED);
+
+            String preIndex = scan.nextLine();
+            System.out.println(ConsoleColors.BLACK);
+            if (regexComparation("^\\d+$", preIndex)) {
+                int index = Integer.parseInt(preIndex);
+                if (index < addressList.size()) {
+                    AdressEntry entry = addressList.get(index);
+                    System.out.println(
+                            ConsoleColors.GREEN_BOLD_BRIGHT + book.GenerateInfoTable(entry) + ConsoleColors.BLACK);
+                } else {
+                    System.out.println("indice invalido");
+                }
+            } else if (preIndex.equals("-1")) {
+                isComplete = true;
+            } else {
+                System.out.println("indice invalido");
+            }
+        }
+    }
+
+    public void toAdd(Scanner scan) {
 
         boolean isCorrectEntry = false;
         String name = "no data", lastName = "no data", street = "no data", state = "no data", postalCode = "no data",
@@ -118,7 +175,7 @@ public class Menu {
 
     }
 
-    public void toExit() {
+    public void toExit(Scanner scan) {
         boolean isCorrect = false;
         while (!isCorrect) {
             System.out.print(
@@ -126,7 +183,7 @@ public class Menu {
                             + ConsoleColors.BLUE + " [no] : " + ConsoleColors.BLACK + ConsoleColors.RED);
             String exit = scan.nextLine();
             System.out.println(ConsoleColors.BLACK);
-            switch (exit) {
+            switch (exit.toLowerCase()) {
                 case "si":
                     System.out.println("Hasta luego");
                     System.exit(0);
@@ -143,78 +200,93 @@ public class Menu {
         }
     }
 
-    public void toDelete() {
+    public void toDelete(Scanner scan) {
 
-        System.out.print(ConsoleColors.CYAN_BOLD + "¿Qué registro deseas eliminar?: " + ConsoleColors.RED);
+        System.out.print(ConsoleColors.BLACK_BOLD + "¿Qué registro deseas eliminar?, " + ConsoleColors.BLACK_UNDERLINED
+                + "ingresa el nombre del registro: "
+                + ConsoleColors.RED);
         String search = scan.nextLine();
 
         // Filtrar direcciones que coinciden con la búsqueda
         ArrayList<AdressEntry> adressToDelete = book.filterAdress(search);
-        if(adressToDelete.size()==1){
+        if (adressToDelete.size() == 1) {
             AdressEntry entry = adressToDelete.get(0);
-            System.out.print(ConsoleColors.BLACK+"Deseas eliminar este registro?\n"+entry.toString()+" \nescribe "+ConsoleColors.BLUE+"si para aceptar y "+ConsoleColors.BLACK+ConsoleColors.RED+"cualquier otra cadena para cancelar"+ConsoleColors.BLACK+": ");
+            System.out.print(
+                    ConsoleColors.BLACK_BOLD + "Deseas eliminar este registro?\n" + ConsoleColors.GREEN_BOLD_BRIGHT
+                            + "\n" + book.GenerateInfoTable(entry) + ConsoleColors.BLACK_BOLD + " \nescribe "
+                            + ConsoleColors.BLACK_UNDERLINED + "si para aceptar y "
+                            + "cualquier otra cadena para cancelar" + ConsoleColors.BLACK + ": " + ConsoleColors.RED);
             String cancel = scan.nextLine();
-            if(cancel.equalsIgnoreCase("si")){
+            if (cancel.equalsIgnoreCase("si")) {
                 System.out.println();
                 book.deleteAdress(entry);
-                System.out.println(ConsoleColors.YELLOW_BOLD + entry.getName()+" "+entry.getLastName()
-                + ConsoleColors.RED_BOLD + " eliminado correctamente"+ConsoleColors.BLACK);
-            }else{
-                System.out.println(ConsoleColors.BLUE+"operacion cancelada"+ConsoleColors.BLACK);
+                System.out.println(ConsoleColors.YELLOW_BOLD + entry.getName() + " " + entry.getLastName()
+                        + ConsoleColors.RED_BOLD + " eliminado correctamente" + ConsoleColors.BLACK);
+            } else {
+                System.out.println(ConsoleColors.BLUE + "operacion cancelada!" + ConsoleColors.BLACK);
             }
-        }
-        else if (!adressToDelete.isEmpty()) {
+        } else if (!adressToDelete.isEmpty()) {
             System.out.println(ConsoleColors.CYAN_BOLD + "Coincidencias:");
             for (AdressEntry entry : adressToDelete) {
                 System.out.println(ConsoleColors.BLUE + adressToDelete.indexOf(entry) + ConsoleColors.BLACK + "."
                         + AdressBook.highlightSearch(entry.getName(), search));
             }
-
-            System.out.println("¿Qué opción deseas?:" +
-                    ConsoleColors.CYAN
-                    + "\nColoca en forma de lista las direcciones a eliminar:" + ConsoleColors.BLACK
-                    + ConsoleColors.CYAN_BOLD
-                    + " [1,2,3,4]" + ConsoleColors.BLUE
-                    + "\nEliminar todas las coincidencias " + ConsoleColors.BLUE_BOLD + "[e]" + ConsoleColors.PURPLE
-                    + "\nCancelar" + ConsoleColors.PURPLE_BOLD + " [c]" + ConsoleColors.RED_BOLD);
-            System.out.print("$ " + ConsoleColors.RED);
-            String deleteOption = scan.nextLine();
-            switch (deleteOption) {
-                case "e":
-                    // Eliminar todas las coincidencias
-                    System.out.println(ConsoleColors.PURPLE + "Registros eliminados:" + ConsoleColors.BLACK);
-                    for (AdressEntry entry : adressToDelete) {
-                        book.deleteAdress(entry);
-                        System.out.println(ConsoleColors.YELLOW_BOLD+entry.getName()+" " +entry.getLastName()+ConsoleColors.BLACK);
-                    }
-                    break;
-                case "c":
-                    // Cancelar
-                    System.out.println(ConsoleColors.CYAN + "Operación cancelada." + ConsoleColors.BLACK);
-                    break;
-                default:
-                    if (regexComparation("\\b\\d+(,\\d+)*\\b", deleteOption)) {
-                        String[] adressToRemove = deleteOption.split(",");
-                        for (String indexRemove : adressToRemove) {
-                            int index = Integer.parseInt(indexRemove);
-                            if (index >= 0 && index < adressToDelete.size()) {
-                                AdressEntry entry = adressToDelete.get(index);
-                                book.deleteAdress(entry);
-                                System.out.println(ConsoleColors.YELLOW_BOLD + index + "." + entry.getName()+" "+entry.getLastName()
-                                        + ConsoleColors.RED_BOLD + " eliminado correctamente"+ConsoleColors.BLACK);
-                            } else {
-                                System.out.println("Índice fuera de los límites: " + index);
-                            }
-                        }
-                    } else {
-                        System.out.println("Formato de entrada inválido.");
-                    }
-                    break;
-            }
+            optionsToDelete(scan, adressToDelete, search);
         } else {
-            System.out.println(ConsoleColors.BLACK+"No se encontraron coincidencias.");
+            System.out.println(ConsoleColors.BLACK + "No se encontraron coincidencias.");
         }
 
+    }
+
+    public void optionsToDelete(Scanner scan, ArrayList<AdressEntry> adressToDelete, String search) {
+        System.out.println("¿Qué opción deseas?:" +
+                ConsoleColors.CYAN
+                + "\nColoca en forma de lista las direcciones a eliminar:" + ConsoleColors.BLACK
+                + ConsoleColors.CYAN_BOLD
+                + " [1,2,3,4]" + ConsoleColors.BLUE
+                + "\nEliminar todas las coincidencias " + ConsoleColors.BLUE_BOLD + "[e]" + ConsoleColors.PURPLE
+                + "\nCancelar" + ConsoleColors.PURPLE_BOLD + " [c]" + ConsoleColors.GREEN
+                + "\nVer informacion completa " + ConsoleColors.GREEN_BOLD + "[d]" + ConsoleColors.RED);
+        System.out.print("$ " + ConsoleColors.RED);
+        String deleteOption = scan.nextLine();
+        switch (deleteOption) {
+            case "e":
+                // Eliminar todas las coincidencias
+                System.out.println(ConsoleColors.PURPLE + "Registros eliminados:" + ConsoleColors.BLACK);
+                for (AdressEntry entry : adressToDelete) {
+                    book.deleteAdress(entry);
+                    System.out.println(ConsoleColors.YELLOW_BOLD + entry.getName() + " " + entry.getLastName()
+                            + ConsoleColors.BLACK);
+                }
+                break;
+            case "c":
+                // Cancelar
+                System.out.println(ConsoleColors.CYAN + "Operación cancelada." + ConsoleColors.BLACK);
+                break;
+            case "d":
+                showCompleteInformation(adressToDelete, scan, search);
+                optionsToDelete(scan, adressToDelete, search);
+                break;
+            default:
+                if (regexComparation("\\b\\d+(,\\d+)*\\b", deleteOption)) {
+                    String[] adressToRemove = deleteOption.split(",");
+                    for (String indexRemove : adressToRemove) {
+                        int index = Integer.parseInt(indexRemove);
+                        if (index >= 0 && index < adressToDelete.size()) {
+                            AdressEntry entry = adressToDelete.get(index);
+                            book.deleteAdress(entry);
+                            System.out.println(ConsoleColors.YELLOW_BOLD + index + "." + entry.getName() + " "
+                                    + entry.getLastName()
+                                    + ConsoleColors.RED_BOLD + " eliminado correctamente" + ConsoleColors.BLACK);
+                        } else {
+                            System.out.println("Índice fuera de los límites: " + index);
+                        }
+                    }
+                } else {
+                    System.out.println("Formato de entrada inválido.");
+                }
+                break;
+        }
     }
 
     public void toShow() {
@@ -223,7 +295,7 @@ public class Menu {
 
     }
 
-    public void exitToMenu(Function function, String message) {
+    public void exitToMenu(Function function, String message, Scanner scan) {
         boolean isCorrect = false;
         while (!isCorrect) {
             function.execute();
@@ -246,7 +318,7 @@ public class Menu {
         }
     }
 
-    public void toExport() {
+    public void toExport(Scanner scan) {
 
         System.out.print("Coloca el nombre del archivo sin la extension: " + ConsoleColors.RED);
         String name = scan.nextLine();
@@ -299,63 +371,5 @@ public class Menu {
                 "|                    " + ConsoleColors.RED + "(g)" + ConsoleColors.BLACK + " Salir              |");
         System.out.println("=============================================");
     }
-
-    // public void s() throws FileNotFoundException {
-    //     System.out.println(
-    //             ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
-    //     String option = "a";
-    //     while (true) {
-    //         options();
-    //         System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
-    //         option = scan.nextLine();
-    //         System.out.println(ConsoleColors.BLACK);
-    //         String backToMenu = "¿Repetir accion?";
-    //         switch (option.toLowerCase()) {
-    //             case "a":
-    //                 exitToMenu(() -> {
-    //                     try {
-    //                         toFileUpload();
-    //                     } catch (FileNotFoundException e) {
-    //                         e.printStackTrace();
-    //                     }
-    //                 }, backToMenu);
-    //                 interrupt();
-    //                 break;
-    //             case "b":
-    //                 exitToMenu(() -> {
-    //                     toAdd();
-    //                 }, backToMenu);
-    //                 break;
-    //             case "c":
-    //                 exitToMenu(() -> {
-    //                     toDelete();
-    //                 }, backToMenu);
-    //                 break;
-    //             case "d":
-    //                 exitToMenu(() -> {
-    //                     toSearch();
-    //                 }, backToMenu);
-    //                 break;
-    //             case "e":
-    //                 exitToMenu(() -> {
-    //                     toShow(book);
-    //                 }, backToMenu);
-    //                 break;
-    //             case "f":
-    //                 exitToMenu(() -> {
-    //                     toExport();
-    //                 }, backToMenu);
-    //                 interrupt();
-    //                 break;
-    //             case "g":
-    //                 toExit();
-    //                 continue;
-    //             default:
-    //                 System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" +
-    //                         ConsoleColors.BLACK);
-    //                 break;
-    //         }
-    //     }
-    
 
 }

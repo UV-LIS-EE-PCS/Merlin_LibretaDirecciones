@@ -1,4 +1,5 @@
 package com.example.AdressData;
+
 public class AdressEntry {
     private String name;
     private String lastName;
@@ -21,7 +22,7 @@ public class AdressEntry {
 
     @Override
     public String toString() {
-        return "direccion:" + "\n" + "nombre = " + name + "\n" + "apellido = " + lastName + "\n" + "calle = " + street
+        return "nombre = " + name + "\n" + "apellido = " + lastName + "\n" + "calle = " + street
                 + "\n"
                 + "estado = "
                 + state + "\n" + "codigo postal = " + postalCode + "\n" + "correo electrónico = " + email
