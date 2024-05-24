@@ -78,9 +78,9 @@ public class HighlightText {
 
     /**
      * 
-     * @param string
-     * @param search
-     * @return
+     * @param string cadena en la cual se resaltara el texto de busqued
+     * @param search texto de busqueda de una cadena
+     * @return cadena con el texto de busqueda resaltado
      */
     public static String highlightSearch(String string, String search) {
         ArrayList<int[]> listOfPositions = find(string, search);
@@ -106,6 +106,13 @@ public class HighlightText {
         return finalString + HighlightText.BLACK;
 
     }
+
+    /***
+     * 
+     * @param string cadena por la cual buscar coincidencia
+     * @param search cadena que contiene la coincidencia deseada
+     * @return <code>Arraylist<int[]> que contiene las pocisiones de inicio y fin de las coincidencias</code>
+     */
 
     public static ArrayList<int[]> find(String string, String search) {
         int[] positionSearch = new int[2];

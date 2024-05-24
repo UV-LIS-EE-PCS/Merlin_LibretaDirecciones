@@ -18,6 +18,10 @@ public class Menu {
         }
     }
 
+    /**
+     * 
+     * @param book puedes inicializar um menu con un AdressBook ya previamente hecho
+     */
     public Menu(AddressBook book) {
         try {
             this.book = book;
@@ -31,6 +35,11 @@ public class Menu {
         void execute();
     }
 
+    /**
+     * metodo de busqueda de un elemento en un <code>AddressBook</code>
+     * 
+     * @param scan scanner para la entrada de datos por consola
+     */
     public void toSearch(Scanner scan) {
 
         System.out.print(HighlightText.CYAN + "Ingresa el nombre de la direccion de busqueda: " + HighlightText.RED);
@@ -52,6 +61,13 @@ public class Menu {
 
     }
 
+    /***
+     * 
+     * @param addressList lista de direcciones para mostrar su informacion
+     * @param scan        scanner para la entrada de datos por consola
+     * @param search      busqueda anteriormente usada en <code>ToDelete()</code>
+     *                    para seleccionar el elemento a buscar
+     */
     private void showCompleteInformation(ArrayList<AddressEntry> addressList, Scanner scan, String search) {
         boolean isComplete = false;
         while (!isComplete) {
@@ -97,6 +113,10 @@ public class Menu {
         }
     }
 
+    /***
+     * 
+     * @param scan scanner para la entrada de datos por consola
+     */
     public void toAdd(Scanner scan) {
 
         boolean isCorrectEntry = false;
@@ -158,6 +178,14 @@ public class Menu {
 
     }
 
+    /**
+     * metodo que usa implemente <code>openFileViaExplorer()</code> de la clase
+     * FileManagement y
+     * <code>uploadAdressFromFile(path)</code> de la clase AddressBook para cargar
+     * un archivo txt a un <code>AddressBook</code>
+     * 
+     * @throws FileNotFoundException exepcion en caso de no encontrar el archivo
+     */
     public void toFileUpload() throws FileNotFoundException {
 
         System.out.println(HighlightText.CYAN + "Selecciona la ruta del archivo por la ventana");
@@ -178,31 +206,11 @@ public class Menu {
 
     }
 
-    public void toExit(Scanner scan) {
-        boolean isCorrect = false;
-        while (!isCorrect) {
-            System.out.print(
-                    "estas seguro de salir? " + HighlightText.RED + " [si]" + HighlightText.BLACK
-                            + HighlightText.BLUE + " [no] : " + HighlightText.BLACK + HighlightText.RED);
-            String exit = scan.nextLine();
-            System.out.println(HighlightText.BLACK);
-            switch (exit.toLowerCase()) {
-                case "si":
-                    System.out.println("Hasta luego");
-                    System.exit(0);
-                case "no":
-                    isCorrect = true;
-                    break;
-
-                default:
-                    System.out.println(
-                            HighlightText.PURPLE + "Selecciona una opción valida!" + HighlightText.BLACK);
-                    break;
-
-            }
-        }
-    }
-
+    /**
+     * elimina uno o varios elementos dentro de un <code>AddressBook</code>
+     * 
+     * @param scan scanner para la entrada de datos por consola
+     */
     public void toDelete(Scanner scan) {
 
         System.out.print(HighlightText.BLACK_BOLD + "¿Qué registro deseas eliminar?, " + HighlightText.BLACK_UNDERLINED
@@ -210,7 +218,6 @@ public class Menu {
                 + HighlightText.RED);
         String search = scan.nextLine();
 
-        // Filtrar direcciones que coinciden con la búsqueda
         ArrayList<AddressEntry> adressToDelete = book.filterAdress(search);
         if (adressToDelete.size() == 1) {
             AddressEntry entry = adressToDelete.get(0);
@@ -241,6 +248,15 @@ public class Menu {
 
     }
 
+    /**
+     * este metodo de diferentes opciones para eliminar uno o varios elementos de un
+     * lista
+     * 
+     * @param scan           scanner para la entrada de datos por consola
+     * @param adressToDelete lista de <code>AddressEntry</code> que contiene las
+     *                       direcciones a eliminar
+     * @param search         busqueda para resaltar el texto
+     */
     public void optionsToDelete(Scanner scan, ArrayList<AddressEntry> adressToDelete, String search) {
         System.out.println("¿Qué opción deseas?:" +
                 HighlightText.CYAN
@@ -292,12 +308,23 @@ public class Menu {
         }
     }
 
+    /**
+     * metodo para mostrar todas los elementos de un <code>AddressBook</code>
+     */
     public void toShow() {
 
         book.showAdress();
 
     }
 
+    /**
+     * este metodo funciona para poder repetir las opciones dentro de un menu y
+     * poder comfirmar la salida dentro de estas mismas
+     * 
+     * @param function interfaz funcional la cual se ejecutara dentro del metodo
+     * @param message  mensaje de salida del metodo
+     * @param scan     scanner para la entrada de datos por consola
+     */
     public void exitToMenu(Function function, String message, Scanner scan) {
         boolean isCorrect = false;
         while (!isCorrect) {
@@ -312,6 +339,9 @@ public class Menu {
                     isCorrect = true;
                 case "si":
                     break;
+                case "$$":
+                    System.out.println("adios!");
+                    System.exit(0);
                 default:
                     System.out.println(
                             HighlightText.PURPLE + "Selecciona una opción valida!" + HighlightText.BLACK);
@@ -321,6 +351,11 @@ public class Menu {
         }
     }
 
+    /**
+     * metodo para exportar un <code>AddressBook</code> a un archivo .txt
+     * 
+     * @param scan scanner para la entrada de datos por consola
+     */
     public void toExport(Scanner scan) {
 
         System.out.print("Coloca el nombre del archivo sin la extension: " + HighlightText.RED);
@@ -338,17 +373,30 @@ public class Menu {
 
     }
 
+    /**
+     * 
+     * @param regexExpresion expresion regular para comparar la entrada de texto
+     * @param string         cadena para comparar con al expresion regular
+     * @return true en caso de coincidir false en el caso contrario
+     */
     private boolean regexComparation(String regexExpresion, String string) {
         return Pattern.matches(regexExpresion, string);
 
     }
 
+    /***
+     * interrumpe un hilo de ejecucion
+     */
     public void interrupt() {
         if (Thread.currentThread().isInterrupted()) {
             Thread.interrupted();
         }
     }
 
+    /**
+     * despliega el menu en caso de no haber datos dentro del AddressBook lo
+     * mostrará en la pantalla
+     */
     public void displayMenu() {
 
         if (book.getSize() == 0) {

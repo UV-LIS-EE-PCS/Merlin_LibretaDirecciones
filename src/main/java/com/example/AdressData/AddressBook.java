@@ -7,8 +7,12 @@ import de.vandermeer.asciitable.AsciiTable;
 
 public class AddressBook {
     private ArrayList<AddressEntry> listAdress;
-    private int size = 0;
+    private int size;
 
+    /***
+     * 
+     * @return regresa el tamaño del <code>AddressBook</code>
+     */
     public int getSize() {
         return this.size;
     }

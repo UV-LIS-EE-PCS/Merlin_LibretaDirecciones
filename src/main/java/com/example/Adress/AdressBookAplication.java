@@ -56,7 +56,28 @@ public class AdressBookAplication {
                     menu.interrupt();
                     break;
                 case "g":
-                    menu.toExit(scan);
+                    boolean isCorrect = false;
+                    while (!isCorrect) {
+                        System.out.print(
+                                "estas seguro de salir? " + HighlightText.RED + " [si]" + HighlightText.BLACK
+                                        + HighlightText.BLUE + " [no] : " + HighlightText.BLACK + HighlightText.RED);
+                        String exit = scan.nextLine();
+                        System.out.println(HighlightText.BLACK);
+                        switch (exit.toLowerCase()) {
+                            case "si":
+                                System.out.println("Hasta luego");
+                                System.exit(0);
+                            case "no":
+                                isCorrect = true;
+                                break;
+
+                            default:
+                                System.out.println(
+                                        HighlightText.PURPLE + "Selecciona una opción valida!" + HighlightText.BLACK);
+                                break;
+
+                        }
+                    }
                     continue;
                 default:
                     System.out.println(HighlightText.PURPLE + "Selecciona una opción valida!" +

@@ -12,7 +12,14 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 public class FileManagement {
+
+    /**
+     * abre el <code>JFileChooser</code> para seleccionar un archivo
+     * 
+     * @return la ruta del archivo
+     */
     public static String openFileViaExplorer() {
+
         final String[] filePath = { "" };
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -48,6 +55,11 @@ public class FileManagement {
         return filePath[0];
     }
 
+    /**
+     * abre el <code>JFileChooser</code> para buscar un directorio
+     * 
+     * @return la ruta del direcotorio
+     */
     public static String openDirectoryViaExplorer() {
         final String[] filePath = { "" };
 
@@ -85,6 +97,12 @@ public class FileManagement {
         return filePath[0];
     }
 
+    /**
+     * convierte un txt a un <code>ArrayList<AddressEntry><code>
+     * &#64;param path ruta del archivo
+     * @return regresa un <code>ArrayList</code> con todas las entradas convertidas
+     * @throws FileNotFoundException no encuentra el archivo
+     */
     public static ArrayList<AddressEntry> txtUploadToArraylist(String path) throws FileNotFoundException {
         File file = new File(path);
         Scanner scan = new Scanner(file);
@@ -112,6 +130,12 @@ public class FileManagement {
         return listToUpload;
     }
 
+    /**
+     * funciona para exportar los contactos a otro archivo .txt
+     * 
+     * @param entry objeto a convertir en un archivo .txt o añádir a uno existente
+     * @param path  ruta del archivo a editar o crear
+     */
     public static void writeAdressToFile(AddressEntry entry, String path) {
         try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(path, true))) {
             bufferEscritor.write(entry.getName() + "\n");
@@ -129,6 +153,12 @@ public class FileManagement {
         }
     }
 
+    /**
+     * lee un archivo
+     * 
+     * @param path directorio del archivo
+     * @return el texto que contiene el archivo
+     */
     public static String readFile(String path) {
         try (Reader reader = new FileReader(path)) {
             int valor = reader.read();
@@ -145,6 +175,12 @@ public class FileManagement {
         }
     }
 
+    /**
+     * convierte un archivo json a un <code>Arraylist</code>
+     * 
+     * @param path directorio del archivo
+     * @return lista con los directorios
+     */
     public static ArrayList<AddressEntry> JsonFileToArrayList(String path) {
         String json = readFile(path);
         Gson gson = new Gson();
@@ -158,10 +194,17 @@ public class FileManagement {
         }
     }
 
-    public static void writeAddressOnJsonFile(String path, ArrayList<AddressEntry> list) {
+    /**
+     * reescribe o crea sobre un archivo json
+     * 
+     * @param path        ruta del archivo
+     * @param addressList convierte una lista de AdressList a un archivo json o
+     *                    reescribe uno existente
+     */
+    public static void writeAddressOnJsonFile(String path, ArrayList<AddressEntry> addressList) {
         try (Writer writer = new FileWriter(path)) {
             Gson gson = new Gson();
-            gson.toJson(list, writer);
+            gson.toJson(addressList, writer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
