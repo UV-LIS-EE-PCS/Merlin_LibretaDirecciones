@@ -1,17 +1,17 @@
 package AddressData;
 
-import com.example.AdressData.AdressEntry;
+import com.example.AdressData.AddressEntry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class AddressEntryTest {
-    private AdressEntry entry = new AdressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030",
+    private AddressEntry entry = new AddressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030",
             "humer-merlin@hotmail.com", "9241397640");
 
     @Test
     public void getNameTest() {
         String name = "rafael";
-        AdressEntry entry = new AdressEntry(name, "merlin", "hermenegildo galeana", "veracruz", "96030",
+        AddressEntry entry = new AddressEntry(name, "merlin", "hermenegildo galeana", "veracruz", "96030",
                 "rafaelmerlinprieto@gmail.com", "9242449018");
         Assertions.assertEquals(name, entry.getName());
     }
@@ -27,7 +27,7 @@ class AddressEntryTest {
     @Test
     public void getLastNameTest() {
         String lastName = "merlin";
-        AdressEntry entry = new AdressEntry("rafael", lastName, "hermenegildo galeana", "veracruz", "96030",
+        AddressEntry entry = new AddressEntry("rafael", lastName, "hermenegildo galeana", "veracruz", "96030",
                 "rafaelmerlinprieto@gmail.com", "9242449018");
 
         Assertions.assertEquals(lastName, entry.getLastName());
@@ -44,7 +44,7 @@ class AddressEntryTest {
     @Test
     public void getStreetTest() {
         String street = "hermenegildo galeana";
-        AdressEntry entry = new AdressEntry("rafael", "merlin", street, "veracruz", "96030",
+        AddressEntry entry = new AddressEntry("rafael", "merlin", street, "veracruz", "96030",
                 "rafaelmerlinprieto@gmail.com", "9242449018");
         Assertions.assertEquals(street, entry.getStreet());
     }
@@ -60,7 +60,7 @@ class AddressEntryTest {
     @Test
     public void getStateTest() {
         String state = "veracruz";
-        AdressEntry entry = new AdressEntry("rafael", "merlin", "hermenegildo galeana", state, "96030",
+        AddressEntry entry = new AddressEntry("rafael", "merlin", "hermenegildo galeana", state, "96030",
                 "rafaelmerlinprieto@gmail.com", "9242449018");
         Assertions.assertEquals(state, entry.getState());
     }
@@ -76,7 +76,7 @@ class AddressEntryTest {
     @Test
     public void getPostalCodeTest() {
         String postalCode = "96030";
-        AdressEntry entry = new AdressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", postalCode,
+        AddressEntry entry = new AddressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", postalCode,
                 "rafaelmerlinprieto@gmail.com", "9242449018");
         Assertions.assertEquals(postalCode, entry.getPostalCode());
     }
@@ -92,7 +92,7 @@ class AddressEntryTest {
     @Test
     public void getEmailTest() {
         String email = "rafaelmerlinprieto@gmail.com";
-        AdressEntry entry = new AdressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030", email,
+        AddressEntry entry = new AddressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030", email,
                 "9242449018");
         Assertions.assertEquals(email, entry.getEmail());
     }
@@ -108,7 +108,7 @@ class AddressEntryTest {
     @Test
     public void getPhoneTest() {
         String phone = "9242449018";
-        AdressEntry entry = new AdressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030",
+        AddressEntry entry = new AddressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030",
                 "rafaelmerlinprieto@gmail.com", phone);
         Assertions.assertEquals(phone, entry.getPhone());
     }

@@ -1,4 +1,5 @@
 package com.example.utilities;
+
 import com.example.AdressData.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,8 +10,6 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
-
-
 
 public class FileManagement {
     public static String openFileViaExplorer() {
@@ -86,13 +85,13 @@ public class FileManagement {
         return filePath[0];
     }
 
-    public static ArrayList<AdressEntry> txtUploadToArraylist(String path) throws FileNotFoundException {
+    public static ArrayList<AddressEntry> txtUploadToArraylist(String path) throws FileNotFoundException {
         File file = new File(path);
         Scanner scan = new Scanner(file);
         int lineText = 0;
         String completeText = "";
 
-        ArrayList<AdressEntry> listToUpload = new ArrayList<>();
+        ArrayList<AddressEntry> listToUpload = new ArrayList<>();
 
         while (scan.hasNextLine()) {
             String line = scan.nextLine();
@@ -100,7 +99,7 @@ public class FileManagement {
             lineText++;
             if (lineText % 7 == 0) {
                 String[] atributes = completeText.split(",");
-                AdressEntry newEntry = new AdressEntry(atributes[0], atributes[1], atributes[2],
+                AddressEntry newEntry = new AddressEntry(atributes[0], atributes[1], atributes[2],
                         atributes[3], atributes[4], atributes[5], atributes[6]);
                 listToUpload.add(newEntry);
                 completeText = "";
@@ -113,10 +112,7 @@ public class FileManagement {
         return listToUpload;
     }
 
-
-
-
-    public static void writeAdressToFile(AdressEntry entry,String path) {
+    public static void writeAdressToFile(AddressEntry entry, String path) {
         try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(path, true))) {
             bufferEscritor.write(entry.getName() + "\n");
             bufferEscritor.write(entry.getLastName() + "\n");
@@ -133,44 +129,42 @@ public class FileManagement {
         }
     }
 
-    public static String readFile(String path){
-        try(Reader reader = new FileReader(path)){
-            int valor=reader.read();
+    public static String readFile(String path) {
+        try (Reader reader = new FileReader(path)) {
+            int valor = reader.read();
             String json = "";
-            while(valor!=-1){
-                json+=(char)valor;
-                valor=reader.read();
+            while (valor != -1) {
+                json += (char) valor;
+                valor = reader.read();
             }
-            //Cerramos el stream
+            // Cerramos el stream
             reader.close();
             return json;
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    } 
-    
-    public static ArrayList<AdressEntry> JsonFileToArrayList(String path){
+    }
+
+    public static ArrayList<AddressEntry> JsonFileToArrayList(String path) {
         String json = readFile(path);
         Gson gson = new Gson();
-        Type userListType = new TypeToken<ArrayList<AdressEntry>>(){}.getType();
-        if(json.isEmpty()){
-            return new ArrayList<AdressEntry>();
-        }else{
+        Type userListType = new TypeToken<ArrayList<AddressEntry>>() {
+        }.getType();
+        if (json.isEmpty()) {
+            return new ArrayList<AddressEntry>();
+        } else {
             return gson.fromJson(json, userListType);
 
         }
     }
- 
 
-    public static void writeAddressOnJsonFile(String path,ArrayList<AdressEntry> list){
-        try (Writer writer = new FileWriter(path)){
+    public static void writeAddressOnJsonFile(String path, ArrayList<AddressEntry> list) {
+        try (Writer writer = new FileWriter(path)) {
             Gson gson = new Gson();
-            gson.toJson(list,writer);
+            gson.toJson(list, writer);
         } catch (IOException e) {
-            throw new RuntimeException(e); 
+            throw new RuntimeException(e);
         }
     }
-
-
 
 }

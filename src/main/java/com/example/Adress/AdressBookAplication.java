@@ -3,7 +3,7 @@ package com.example.Adress;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import com.example.utilities.ConsoleColors;
+import com.example.utilities.HighlightText;
 
 public class AdressBookAplication {
 
@@ -11,13 +11,13 @@ public class AdressBookAplication {
         Menu menu = new Menu();
         Scanner scan = new Scanner(System.in);
         System.out.println(
-                ConsoleColors.BLUE_BOLD + "==================Bienvenido=================" + ConsoleColors.BLACK + "\n");
+                HighlightText.BLUE_BOLD + "==================Bienvenido=================" + HighlightText.BLACK + "\n");
         String option = "a";
         while (true) {
             menu.displayMenu();
-            System.out.print(ConsoleColors.RED_BOLD + "$ " + ConsoleColors.RED);
+            System.out.print(HighlightText.RED_BOLD + "$ " + HighlightText.RED);
             option = scan.nextLine();
-            System.out.println(ConsoleColors.BLACK);
+            System.out.println(HighlightText.BLACK);
             switch (option.toLowerCase()) {
                 case "a":
                     menu.exitToMenu(() -> {
@@ -59,8 +59,8 @@ public class AdressBookAplication {
                     menu.toExit(scan);
                     continue;
                 default:
-                    System.out.println(ConsoleColors.PURPLE + "Selecciona una opción valida!" +
-                            ConsoleColors.BLACK);
+                    System.out.println(HighlightText.PURPLE + "Selecciona una opción valida!" +
+                            HighlightText.BLACK);
                     break;
             }
         }

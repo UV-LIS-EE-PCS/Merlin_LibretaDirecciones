@@ -1,7 +1,8 @@
 package com.example.utilities;
 
+import java.util.ArrayList;
 
-public class ConsoleColors {
+public class HighlightText {
     // Reset
     public static final String RESET = "\033[0m"; // Text Reset
 
@@ -74,4 +75,63 @@ public class ConsoleColors {
     public static final String PURPLE_BACKGROUND_BRIGHT = "\033[0;105m"; // PURPLE
     public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m"; // CYAN
     public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m"; // WHITE
+
+    /**
+     * 
+     * @param string
+     * @param search
+     * @return
+     */
+    public static String highlightSearch(String string, String search) {
+        ArrayList<int[]> listOfPositions = find(string, search);
+        String finalString = "";
+        int indexCounter = 0;
+        for (int i = 0; i < string.length(); i++) {
+
+            if (i == listOfPositions.get(indexCounter)[0]) {
+                finalString += HighlightText.PURPLE_UNDERLINED;
+            }
+            if (i == listOfPositions.get(indexCounter)[1]) {
+                finalString += HighlightText.BLACK;
+                if (listOfPositions.size() == indexCounter + 1) {
+                    indexCounter = listOfPositions.size() - 1;
+                } else {
+                    indexCounter++;
+                }
+
+            }
+            finalString += string.charAt(i);
+        }
+
+        return finalString + HighlightText.BLACK;
+
+    }
+
+    public static ArrayList<int[]> find(String string, String search) {
+        int[] positionSearch = new int[2];
+        ArrayList<int[]> listOfPostion = new ArrayList<>();
+
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) == search.charAt(0)) {
+                positionSearch[0] = i;
+                int counter = i;
+                for (int j = 0; j < search.length(); j++) {
+                    if (string.charAt(counter) == search.charAt(j)) {
+
+                        counter += 1;
+                        if (j == search.length() - 1) {
+                            positionSearch[1] = counter;
+                            int[] positionSearchCopy = positionSearch.clone();
+                            listOfPostion.add(positionSearchCopy);
+
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return listOfPostion;
+    }
 }

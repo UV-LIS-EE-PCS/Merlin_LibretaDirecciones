@@ -1,6 +1,9 @@
 package com.example.AdressData;
 
-public class AdressEntry {
+import de.vandermeer.asciitable.AsciiTable;
+
+public class AddressEntry {
+
     private String name;
     private String lastName;
     private String street;
@@ -9,7 +12,7 @@ public class AdressEntry {
     private String email;
     private String phone;
 
-    public AdressEntry(String name, String lastName, String street, String state, String postalCode, String email,
+    public AddressEntry(String name, String lastName, String street, String state, String postalCode, String email,
             String phone) {
         this.name = name;
         this.lastName = lastName;
@@ -37,7 +40,7 @@ public class AdressEntry {
         if (object.getClass() != this.getClass()) {
             return false;
         }
-        AdressEntry compare = (AdressEntry) object;
+        AddressEntry compare = (AddressEntry) object;
         return compare.name.strip().toLowerCase().equals(name.strip().toLowerCase()) &&
                 compare.lastName.strip().toLowerCase().equals(lastName.strip().toLowerCase()) &&
                 compare.street.strip().toLowerCase().equals(street.strip().toLowerCase()) &&
@@ -101,6 +104,24 @@ public class AdressEntry {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    /**
+     * 
+     * @return tabla con toda la informacion de un <code>AddressEntry</code>
+     */
+    public String GenerateInfoTable() {
+
+        AsciiTable dataText = new AsciiTable();
+        dataText.addRule();
+        dataText.addRow("Nombre", "Apellido", "Calle", "Estado", "Codigo Postal", "Correo Electrónico", "Telefono");
+        dataText.addRule();
+        dataText.addRow(name, lastName, street, state,
+                postalCode,
+                email, phone);
+        dataText.addRule();
+        String rend = dataText.render(150);
+        return rend;
     }
 
 }
