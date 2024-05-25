@@ -11,10 +11,20 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
+/**
+ * es una clase que controla la lectura y escritura de archivos para los otras
+ * clases
+ */
 public class FileManagement {
+    /**
+     * default constructor
+     */
+    FileManagement() {
+
+    }
 
     /**
-     * abre el <code>JFileChooser</code> para seleccionar un archivo
+     * abre el JFileChooser para seleccionar un archivo
      * 
      * @return la ruta del archivo
      */
@@ -56,7 +66,7 @@ public class FileManagement {
     }
 
     /**
-     * abre el <code>JFileChooser</code> para buscar un directorio
+     * abre el JFileChooser para buscar un directorio
      * 
      * @return la ruta del direcotorio
      */
@@ -98,9 +108,11 @@ public class FileManagement {
     }
 
     /**
-     * convierte un txt a un <code>ArrayList<AddressEntry><code>
+     * convierte un txt a un ArrayList
      * &#64;param path ruta del archivo
-     * @return regresa un <code>ArrayList</code> con todas las entradas convertidas
+     * 
+     * @param path ruta del archivo
+     * @return regresa un ArrayList con todas las entradas convertidas
      * @throws FileNotFoundException no encuentra el archivo
      */
     public static ArrayList<AddressEntry> txtUploadToArraylist(String path) throws FileNotFoundException {
@@ -176,7 +188,7 @@ public class FileManagement {
     }
 
     /**
-     * convierte un archivo json a un <code>Arraylist</code>
+     * convierte un archivo json a un Arraylist
      * 
      * @param path directorio del archivo
      * @return lista con los directorios

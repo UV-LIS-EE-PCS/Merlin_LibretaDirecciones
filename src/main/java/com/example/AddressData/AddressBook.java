@@ -5,18 +5,27 @@ import java.util.ArrayList;
 import java.io.*;
 import de.vandermeer.asciitable.AsciiTable;
 
+/**
+ * AddressBook es una clase que maneja una colección de entradas de dirección.
+ */
 public class AddressBook {
     private ArrayList<AddressEntry> listAdress;
     private int size;
 
     /***
+     * consigue el tamaño de el libro
      * 
-     * @return regresa el tamaño del <code>AddressBook</code>
+     * @return regresa el tamaño del AddressBook
      */
     public int getSize() {
         return this.size;
     }
 
+    /**
+     * constructor por defecto carga siempre un archivo
+     * 
+     * @throws FileNotFoundException no se encuentra el archivo
+     */
     public AddressBook() throws FileNotFoundException {
         try {
             String path = "src/main/java/com/example/info/contactos.json";
@@ -30,9 +39,10 @@ public class AddressBook {
     }
 
     /**
+     * constructor para usar una coleccion de adressEntry como AddressBook
      * 
-     * @param listAdress una lista de <code>AdressEntry</code> la cual tomará el
-     *                   objeto como el parametro <code>listAdress</code>
+     * @param listAdress una lista de AdressEntry la cual tomara el
+     *                   objeto como el parametro listAdress
      * 
      */
     public AddressBook(ArrayList<AddressEntry> listAdress) {
@@ -42,9 +52,10 @@ public class AddressBook {
     }
 
     /**
+     * añade una nueva direccion al libro
      * 
      * @param entry Address entry a agregar al libro de direcciones
-     * @return devuelve true si el parametro <code>entry</code> es
+     * @return devuelve true si el parametro entry es
      *         repetido o false si es nuevo
      */
     public boolean addAddress(AddressEntry entry) {
@@ -72,6 +83,7 @@ public class AddressBook {
     }
 
     /***
+     * elimina una entrada en el libro
      * 
      * @param entry entrada a eliminar del libro de direcciones
      */
@@ -88,6 +100,7 @@ public class AddressBook {
     }
 
     /***
+     * 
      * muestra por pantalla todas las direcciones del libro
      */
     public void showAdress() {
@@ -143,10 +156,11 @@ public class AddressBook {
     }
 
     /**
+     * filtra por nombre las entradas del libro
      * 
-     * @param search cadena de busqueda para un <code>AddressEntry</code> dentro de
-     *               un <code>AddressBook</code>
-     * @return una <code>ArrayList<AdressEntry></code> con las direcciones
+     * @param search cadena de busqueda para un AddressEntry dentro de
+     *               un AddressBook
+     * @return una ArrayList con las direcciones
      *         encontradas
      */
     public ArrayList<AddressEntry> filterAddress(String search) {
@@ -161,10 +175,11 @@ public class AddressBook {
     }
 
     /***
+     * genera una tabla con los datos del libro
      * 
-     * @param listEntry lista con diferentes <AddressEntry>
+     * @param listEntry lista con diferentes AddressEntry
      * @return una tabla que contiene toda la informacion de un
-     *         <code>AdressBook</code>
+     *         AdressBook
      */
     private String generateAllDataTable(ArrayList<AddressEntry> listAddress) {
         int numberOfAdress = 1;

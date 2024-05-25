@@ -7,9 +7,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+/**
+ * Menu es una clase que maneja un AdressBook.
+ */
 public class Menu {
     private AddressBook book;
 
+    /**
+     * constructor por defecto
+     */
     public Menu() {
         try {
             this.book = new AddressBook();
@@ -19,6 +25,7 @@ public class Menu {
     }
 
     /**
+     * constructor que recibe un book como book por defecto al inciar un objeto
      * 
      * @param book puedes inicializar um menu con un AdressBook ya previamente hecho
      */
@@ -36,7 +43,7 @@ public class Menu {
     }
 
     /**
-     * metodo de busqueda de un elemento en un <code>AddressBook</code>
+     * metodo de busqueda de un elemento en un AddressBook
      * 
      * @param scan scanner para la entrada de datos por consola
      */
@@ -65,11 +72,12 @@ public class Menu {
      * 
      * @param addressList lista de direcciones para mostrar su informacion
      * @param scan        scanner para la entrada de datos por consola
-     * @param search      busqueda anteriormente usada en <code>ToDelete()</code>
+     * @param search      busqueda anteriormente usada en ToDelete()
      *                    para seleccionar el elemento a buscar
      */
 
     /***
+     * añade una entrada en un book
      * 
      * @param scan scanner para la entrada de datos por consola
      */
@@ -135,10 +143,10 @@ public class Menu {
     }
 
     /**
-     * metodo que usa implemente <code>openFileViaExplorer()</code> de la clase
+     * metodo que usa implemente openFileViaExplorer() de la clase
      * FileManagement y
-     * <code>uploadAdressFromFile(path)</code> de la clase AddressBook para cargar
-     * un archivo txt a un <code>AddressBook</code>
+     * uploadAdressFromFile(path de la clase AddressBook para cargar
+     * un archivo txt a un AddressBook
      * 
      * @throws FileNotFoundException exepcion en caso de no encontrar el archivo
      */
@@ -163,7 +171,7 @@ public class Menu {
     }
 
     /**
-     * elimina uno o varios elementos dentro de un <code>AddressBook</code>
+     * elimina uno o varios elementos dentro de un AddressBook
      * 
      * @param scan scanner para la entrada de datos por consola
      */
@@ -209,7 +217,7 @@ public class Menu {
      * lista
      * 
      * @param scan            scanner para la entrada de datos por consola
-     * @param addressToDelete lista de <code>AddressEntry</code> que contiene las
+     * @param addressToDelete lista de AddressEntry que contiene las
      *                        direcciones a eliminar
      * @param search          busqueda para resaltar el texto
      */
@@ -264,6 +272,11 @@ public class Menu {
         }
     }
 
+    /**
+     * @param addressList
+     * @param scan
+     * @param search
+     */
     private void showCompleteInformation(ArrayList<AddressEntry> addressList, Scanner scan, String search) {
         boolean isComplete = false;
         while (!isComplete) {
@@ -310,7 +323,7 @@ public class Menu {
     }
 
     /**
-     * metodo para mostrar todas los elementos de un <code>AddressBook</code>
+     * metodo para mostrar todas los elementos de un AddressBook
      */
     public void toShow() {
 
@@ -353,8 +366,8 @@ public class Menu {
     }
 
     /**
-     * metodo para exportar un <code>AddressBook</code> a un archivo .txt
-     * 
+     * metodo para exportar un AddressBook a un archivo .txt
+     *
      * @param scan scanner para la entrada de datos por consola
      */
     public void toExport(Scanner scan) {
@@ -398,7 +411,7 @@ public class Menu {
      * despliega el menu en caso de no haber datos dentro del AddressBook lo
      * mostrará en la pantalla
      */
-    private void Menu() {
+    private void menu() {
 
         if (book.getSize() == 0) {
             System.out.println(HighlightText.RED_BOLD + "--no hay datos en esta lista" + HighlightText.BLACK);
@@ -429,13 +442,16 @@ public class Menu {
         System.out.println("=============================================");
     }
 
+    /*
+     * despliega el menu por consola
+     */
     public void displayMenu() {
         Scanner scan = new Scanner(System.in);
         System.out.println(
                 HighlightText.BLUE_BOLD + "==================Bienvenido=================" + HighlightText.BLACK + "\n");
         String option = "a";
         while (true) {
-            Menu();
+            menu();
             System.out.print(HighlightText.RED_BOLD + "$ " + HighlightText.RED);
             option = scan.nextLine();
             System.out.println(HighlightText.BLACK);
