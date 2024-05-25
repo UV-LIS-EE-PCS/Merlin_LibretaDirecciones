@@ -1,8 +1,9 @@
 package AddressData;
 
-import com.example.AdressData.AddressEntry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.example.AddressData.AddressEntry;
 
 class AddressEntryTest {
     private AddressEntry entry = new AddressEntry("rafael", "merlin", "hermenegildo galeana", "veracruz", "96030",

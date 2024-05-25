@@ -1,4 +1,4 @@
-package com.example.AdressData;
+package com.example.AddressData;
 
 import com.example.utilities.*;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class AddressBook {
                 System.out.println(HighlightText.PURPLE + "esta entrada ya existe: " + HighlightText.BLACK);
                 System.out.println(HighlightText.RED + HighlightText.BLACK);
                 System.out.println(
-                        HighlightText.RED + entry.GenerateInfoTable() + "\n"
+                        HighlightText.RED + entry.generateInfoTable() + "\n"
                                 + HighlightText.BLACK
                                 + "\n");
                 return true;
@@ -94,7 +94,7 @@ public class AddressBook {
         if (listAdress.isEmpty()) {
             System.out.println(HighlightText.CYAN + "Sin datos" + HighlightText.BLACK);
         } else {
-            System.out.println(GenerateAllDataTable(listAdress) + "\n");
+            System.out.println(generateAllDataTable(listAdress) + "\n");
 
         }
     }
@@ -134,7 +134,7 @@ public class AddressBook {
     public void exportAdressBook(String destinationPath) {
         try {
             for (AddressEntry entry : listAdress) {
-                FileManagement.writeAdressToFile(entry, destinationPath);
+                FileManagement.writeAddressToFile(entry, destinationPath);
             }
             System.out.println(HighlightText.PURPLE + "Archivo importado con exito" + HighlightText.BLACK);
         } catch (Exception e) {
@@ -149,15 +149,15 @@ public class AddressBook {
      * @return una <code>ArrayList<AdressEntry></code> con las direcciones
      *         encontradas
      */
-    public ArrayList<AddressEntry> filterAdress(String search) {
-        ArrayList<AddressEntry> filterAdress = new ArrayList<>();
+    public ArrayList<AddressEntry> filterAddress(String search) {
+        ArrayList<AddressEntry> filterAddress = new ArrayList<>();
         for (AddressEntry entry : listAdress) {
             if (entry.getName().toLowerCase().strip().contains(search.toLowerCase().strip())) {
-                filterAdress.add(entry);
+                filterAddress.add(entry);
             }
         }
 
-        return filterAdress;
+        return filterAddress;
     }
 
     /***
@@ -166,7 +166,7 @@ public class AddressBook {
      * @return una tabla que contiene toda la informacion de un
      *         <code>AdressBook</code>
      */
-    private String GenerateAllDataTable(ArrayList<AddressEntry> listEntry) {
+    private String generateAllDataTable(ArrayList<AddressEntry> listAddress) {
         int numberOfAdress = 1;
 
         AsciiTable dataText = new AsciiTable();
@@ -177,7 +177,7 @@ public class AddressBook {
                 "Telefono");
         dataText.addRule();
 
-        for (AddressEntry entry : listEntry) {
+        for (AddressEntry entry : listAddress) {
             dataText.addRow(numberOfAdress, entry.getName(), entry.getLastName(), entry.getStreet(), entry.getState(),
                     entry.getPostalCode(), entry.getEmail(), entry.getPhone());
             dataText.addRule();

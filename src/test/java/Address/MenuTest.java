@@ -7,9 +7,10 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-import com.example.Adress.*;
-import com.example.AdressData.AddressBook;
-import com.example.AdressData.AddressEntry;
+
+import com.example.Address.*;
+import com.example.AddressData.AddressBook;
+import com.example.AddressData.AddressEntry;
 
 public class MenuTest {
     private ArrayList<AddressEntry> listAddress = new ArrayList<AddressEntry>();

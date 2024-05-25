@@ -1,6 +1,6 @@
 package com.example.utilities;
 
-import com.example.AdressData.*;
+import com.example.AddressData.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -136,7 +136,7 @@ public class FileManagement {
      * @param entry objeto a convertir en un archivo .txt o añádir a uno existente
      * @param path  ruta del archivo a editar o crear
      */
-    public static void writeAdressToFile(AddressEntry entry, String path) {
+    public static void writeAddressToFile(AddressEntry entry, String path) {
         try (BufferedWriter bufferEscritor = new BufferedWriter(new FileWriter(path, true))) {
             bufferEscritor.write(entry.getName() + "\n");
             bufferEscritor.write(entry.getLastName() + "\n");

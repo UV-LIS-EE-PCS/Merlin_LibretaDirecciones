@@ -1,4 +1,4 @@
-package com.example.AdressData;
+package com.example.AddressData;
 
 import de.vandermeer.asciitable.AsciiTable;
 
@@ -110,7 +110,7 @@ public class AddressEntry {
      * 
      * @return tabla con toda la informacion de un <code>AddressEntry</code>
      */
-    public String GenerateInfoTable() {
+    public String generateInfoTable() {
 
         AsciiTable dataText = new AsciiTable();
         dataText.addRule();

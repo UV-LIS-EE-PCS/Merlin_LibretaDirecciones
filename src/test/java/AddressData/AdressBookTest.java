@@ -3,7 +3,8 @@ package AddressData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import com.example.AdressData.*;
+
+import com.example.AddressData.*;
 import com.example.utilities.HighlightText;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ class AdressBookTest {
         listAddress.add(entry);
         listAddress.add(entry2);
         book = new AddressBook(listAddress);
-        ArrayList<AddressEntry> filterlist = book.filterAdress(search);
+        ArrayList<AddressEntry> filterlist = book.filterAddress(search);
         assertEquals(1, filterlist.size());
         assertEquals(entry, listAddress.get(0));
     }
@@ -92,7 +93,7 @@ class AdressBookTest {
         listAddress.add(entry);
         listAddress.add(entry2);
         book = new AddressBook(listAddress);
-        ArrayList<AddressEntry> filterlist = book.filterAdress(search);
+        ArrayList<AddressEntry> filterlist = book.filterAddress(search);
         assertEquals(0, filterlist.size());
     }
 
