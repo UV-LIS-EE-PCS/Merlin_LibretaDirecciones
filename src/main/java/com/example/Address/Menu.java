@@ -108,7 +108,9 @@ public class Menu {
      */
     private void deleteAddressBook(Scanner scan) throws FileNotFoundException{
         if(booksDirectories.size() ==1){
-            System.out.println("solo cuentas con una lista!");
+            booksDirectories.remove(booksDirectories.get(0));
+            FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES,booksDirectories);
+            addAddressBook(scan);
             return;
         }
         boolean isCorret = false;
@@ -126,11 +128,14 @@ public class Menu {
                 String pathDirecory = booksDirectories.get(index);
                 booksDirectories.remove(pathDirecory);
                 FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES,booksDirectories);
-                if(pathDirecory==book.getPath()){
+                if(pathDirecory==book.getPath() && booksDirectories.size()>1){
                     selectAddressBook(scan);
+                    System.out.println("lista de directorios eliminada");
+                    return;
                 }
-                isCorret = true;
+                book = new AddressBook(booksDirectories.get(0));
                 System.out.println("lista de directorios eliminada");
+                isCorret = true;
             } else {
                 System.out.println("indice invalido");
             }
