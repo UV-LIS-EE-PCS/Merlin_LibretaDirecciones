@@ -1,53 +1,165 @@
-package com.example.Address;
+package com.example.address;
 
-import com.example.AddressData.*;
+import com.example.addressdata.*;
 import com.example.utilities.*;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
 /**
  * Menu es una clase que maneja un AdressBook.
  */
 public class Menu {
+    /**
+     * libreta de direciones que usa el menu
+     */
     private AddressBook book;
-
+    /***
+     * directorios de todos los AddressBook que maneja la aplicación
+     */
+    private ArrayList<String> booksDirectories;
+    
+    /**
+     * directorio donde se guardan todos los addressbook en formato json
+     */
+    private final String ADDRESSBOOKDIRECTORY = "src/main/java/com/example/info/directorios/";
+    /**
+     * archivo que contiene las rutas de todos los archivos addressBook en formato .json
+     */
+    private final String PATHBOOKSDIRECTORIES = "src/main/java/com/example/info/books.json";  
     /**
      * constructor por defecto
+     * 
      */
     public Menu() {
-        try {
-            this.book = new AddressBook();
-        } catch (Exception e) {
-            System.out.println("Error al cargar el archivo contactos.json");
-        }
+       this.booksDirectories = FileManagement.jsonFileToBooksList(PATHBOOKSDIRECTORIES);
+    }
+
+    /***
+     * 
+     */
+    public Menu(ArrayList<String> booksDirectories){
+    
+       this.booksDirectories = booksDirectories;
+       FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES, booksDirectories);
     }
 
     /**
-     * constructor que recibe un book como book por defecto al inciar un objeto
-     * 
-     * @param book puedes inicializar um menu con un AdressBook ya previamente hecho
+     * interfaz funcional para remplazar por expresion lambda
      */
-    public Menu(AddressBook book) {
-        try {
-            this.book = book;
-        } catch (Exception e) {
-            System.out.println("Error al cargar el archivo contactos.json");
-        }
-    }
-
+    
     @FunctionalInterface
     interface Function {
         void execute();
+        
     }
+
+
+    /**
+     * método que agrega un nuevo addressBook al programa
+     * @param scan scanner paraa la entrada del nombre dek addressBook
+     * @throws FileNotFoundException errror al no encontrar el archivo
+     */
+    private void addAddressBook(Scanner scan) throws FileNotFoundException{
+        System.out.println(HighlightText.BLACK+"ingresa el nombre de la lista a crear:"+HighlightText.RED);
+        String nameList = scan.nextLine();
+        String path =ADDRESSBOOKDIRECTORY+nameList.replace(" ", "_")+".json";
+        AddressBook newbook = new AddressBook(path);
+        book = newbook;  
+        booksDirectories.add(path);
+        FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES,booksDirectories);
+
+    }
+
+    /**
+     * método para cambiar entre AdressBook
+     * @param scan scanner paraa la entrada del nombre dek addressBook
+     * @throws FileNotFoundException errror al no encontrar el archivo
+     */
+    private void selectAddressBook(Scanner scan) throws FileNotFoundException{
+        boolean isCorret = false;
+        while (!isCorret) {
+            System.out.println(HighlightText.GREEN_BOLD_BRIGHT+"¿que lista deseas usar? selecciona una ");
+        for(String bookDirectory:this.booksDirectories ){
+            System.out.println(HighlightText.GREEN_BOLD+booksDirectories.indexOf(bookDirectory)+HighlightText.YELLOW+"."+getNameFromPath(bookDirectory) + HighlightText.RED);
+        }
+        System.out.print(HighlightText.RED_BOLD+"$ "+HighlightText.RED);
+        String preIndex = scan.nextLine();
+        System.out.println(HighlightText.BLACK);
+        if (regexComparation("^\\d+$", preIndex)) {
+            int index = Integer.parseInt(preIndex);
+            if (index < booksDirectories.size()) {
+                AddressBook newbook = new AddressBook(booksDirectories.get(index));
+                book = newbook;
+                System.out.println("se ha cambiado a la lista: "+HighlightText.BLUE+ getNameFromPath(booksDirectories.get(index))+HighlightText.BLACK);
+                isCorret = true;
+            } else {
+                System.out.println("indice invalido");
+            }
+        }else {
+            System.out.println("indice invalido");
+        }
+        }
+    }
+    /**
+     * elimina una AddressBook seleccionada
+     * @param scan scanner para seleccionar las opciones del metodo
+     * @throws FileNotFoundException expecion en caso de no encontrar el archivo
+     */
+    private void deleteAddressBook(Scanner scan) throws FileNotFoundException{
+        if(booksDirectories.size() ==1){
+            System.out.println("solo cuentas con una lista!");
+            return;
+        }
+        boolean isCorret = false;
+        while (!isCorret) {
+            System.out.println(HighlightText.GREEN_BOLD_BRIGHT+"¿que lista deseas eliminar? selecciona una ");
+        for(String bookDirectory:this.booksDirectories ){
+            System.out.println(HighlightText.GREEN_BOLD+booksDirectories.indexOf(bookDirectory)+HighlightText.YELLOW+"."+getNameFromPath(bookDirectory) + HighlightText.RED);
+        }
+        System.out.print(HighlightText.RED_BOLD+"$ "+HighlightText.RED);
+        String preIndex = scan.nextLine();
+        System.out.println(HighlightText.BLACK);
+        if (regexComparation("^\\d+$", preIndex)) {
+            int index = Integer.parseInt(preIndex);
+            if (index < booksDirectories.size()) {
+                String pathDirecory = booksDirectories.get(index);
+                booksDirectories.remove(pathDirecory);
+                FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES,booksDirectories);
+                if(pathDirecory==book.getPath()){
+                    selectAddressBook(scan);
+                }
+                isCorret = true;
+                System.out.println("lista de directorios eliminada");
+            } else {
+                System.out.println("indice invalido");
+            }
+        }else {
+            System.out.println("indice invalido");
+        }
+        }
+    }   
+    
+
+
+    /**
+     * metodo para obtener el nombre de un addressBooks  a travez de su path
+     * @param path path del addressBook
+     * @return nombre deL addressBook
+     */
+    private String getNameFromPath(String path){
+        ArrayList<int[]> hola = HighlightText.find(path,ADDRESSBOOKDIRECTORY);
+        int indexExtension = path.indexOf(".json");
+        return path.substring(hola.get(0)[1],indexExtension);
+    }
+    
 
     /**
      * metodo de busqueda de un elemento en un AddressBook
      * 
      * @param scan scanner para la entrada de datos por consola
      */
-    public void toSearch(Scanner scan) {
+    private void toSearch(Scanner scan) {
 
         System.out.print(HighlightText.CYAN + "Ingresa el nombre de la direccion de busqueda: " + HighlightText.RED);
         String search = scan.nextLine();
@@ -81,7 +193,7 @@ public class Menu {
      * 
      * @param scan scanner para la entrada de datos por consola
      */
-    public void toAdd(Scanner scan) {
+    private void toAdd(Scanner scan) {
 
         boolean isCorrectEntry = false;
         String name = "no data", lastName = "no data", street = "no data", state = "no data", postalCode = "no data",
@@ -150,7 +262,7 @@ public class Menu {
      * 
      * @throws FileNotFoundException exepcion en caso de no encontrar el archivo
      */
-    public void toFileUpload() throws FileNotFoundException {
+    private void toFileUpload() throws FileNotFoundException {
 
         System.out.println(HighlightText.CYAN + "Selecciona la ruta del archivo por la ventana");
         String path = FileManagement.openFileViaExplorer();
@@ -175,7 +287,7 @@ public class Menu {
      * 
      * @param scan scanner para la entrada de datos por consola
      */
-    public void toDelete(Scanner scan) {
+    private void toDelete(Scanner scan) {
 
         System.out.print(HighlightText.BLACK_BOLD + "¿Qué registro deseas eliminar?, " + HighlightText.BLACK_UNDERLINED
                 + "ingresa el nombre del registro: "
@@ -221,7 +333,7 @@ public class Menu {
      *                        direcciones a eliminar
      * @param search          busqueda para resaltar el texto
      */
-    public void optionsToDelete(Scanner scan, ArrayList<AddressEntry> addressToDelete, String search) {
+    private void optionsToDelete(Scanner scan, ArrayList<AddressEntry> addressToDelete, String search) {
         System.out.println("¿Qué opción deseas?:" +
                 HighlightText.CYAN
                 + "\nColoca en forma de lista las direcciones a eliminar:" + HighlightText.BLACK
@@ -325,7 +437,7 @@ public class Menu {
     /**
      * metodo para mostrar todas los elementos de un AddressBook
      */
-    public void toShow() {
+    private void toShow() {
 
         book.showAdress();
 
@@ -339,7 +451,7 @@ public class Menu {
      * @param message  mensaje de salida del metodo
      * @param scan     scanner para la entrada de datos por consola
      */
-    public void exitToMenu(Function function, String message, Scanner scan) {
+    private void exitToMenu(Function function, String message, Scanner scan) {
         boolean isCorrect = false;
         while (!isCorrect) {
             function.execute();
@@ -370,7 +482,7 @@ public class Menu {
      *
      * @param scan scanner para la entrada de datos por consola
      */
-    public void toExport(Scanner scan) {
+    private void toExport(Scanner scan) {
 
         System.out.print("Coloca el nombre del archivo sin la extension: " + HighlightText.RED);
         String name = scan.nextLine();
@@ -401,7 +513,7 @@ public class Menu {
     /***
      * interrumpe un hilo de ejecucion
      */
-    public void interrupt() {
+    private void interrupt() {
         if (Thread.currentThread().isInterrupted()) {
             Thread.interrupted();
         }
@@ -438,19 +550,32 @@ public class Menu {
         System.out.println("|                    " + HighlightText.CYAN_BRIGHT + "(f)" + HighlightText.BLACK
                 + " Exportar archivo   |");
         System.out.println(
-                "|                    " + HighlightText.RED + "(g)" + HighlightText.BLACK + " Salir              |");
+                    "|                    " + HighlightText.RED + "(h)" + HighlightText.BLACK + " cambiar lista      |");
+        System.out.println(
+                        "|                    " + HighlightText.RED + "(i)" + HighlightText.BLACK + " agregar lista      |");
+        System.out.println(
+                            "|                    " + HighlightText.RED + "(g)" + HighlightText.BLACK + " Salir              |");
         System.out.println("=============================================");
-    }
-
+                        }
+                    
     /*
      * despliega el menu por consola
      */
-    public void displayMenu() {
+    public void displayMenu() throws FileNotFoundException {
         Scanner scan = new Scanner(System.in);
+        if(booksDirectories.isEmpty()){
+            System.out.println("crea una nueva lista no tienes lista");
+            addAddressBook(scan);
+        }else if(booksDirectories.size() == 1){
+            book = new AddressBook(booksDirectories.get(0));
+        }else{
+            selectAddressBook(scan);
+        }
         System.out.println(
-                HighlightText.BLUE_BOLD + "==================Bienvenido=================" + HighlightText.BLACK + "\n");
-        String option = "a";
+            HighlightText.BLUE_BOLD + "==================Bienvenido=================" + HighlightText.BLACK + "\n");
+            String option = "a";
         while (true) {
+            System.out.println(HighlightText.GREEN_BOLD+getNameFromPath(book.getPath()));
             menu();
             System.out.print(HighlightText.RED_BOLD + "$ " + HighlightText.RED);
             option = scan.nextLine();
@@ -515,6 +640,15 @@ public class Menu {
 
                         }
                     }
+                    continue;
+                case"h":
+                    selectAddressBook(scan);
+                    continue;
+                case"i":
+                    addAddressBook(scan);
+                    continue;
+                case "j":
+                    deleteAddressBook(scan);
                     continue;
                 default:
                     System.out.println(HighlightText.PURPLE + "Selecciona una opción valida!" +

@@ -1,4 +1,4 @@
-package com.example.AddressData;
+package com.example.addressdata;
 
 import com.example.utilities.*;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import de.vandermeer.asciitable.AsciiTable;
 public class AddressBook {
     private ArrayList<AddressEntry> listAdress;
     private int size;
+    private String path ;
 
     /***
      * consigue el tamaño de el libro
@@ -21,15 +22,27 @@ public class AddressBook {
         return this.size;
     }
 
+    
+
+    /**
+     * metodo para obtener el path en el que se guarddan los contactos de este addressBook
+     * @return ruta del archivo
+     */
+    public String getPath() {
+        return path;
+    }
+
+
+
     /**
      * constructor por defecto carga siempre un archivo
      * 
      * @throws FileNotFoundException no se encuentra el archivo
      */
-    public AddressBook() throws FileNotFoundException {
+    public AddressBook(String path) throws FileNotFoundException {
         try {
-            String path = "src/main/java/com/example/info/contactos.json";
-            ArrayList<AddressEntry> Adress = FileManagement.JsonFileToArrayList(path);
+            this.path = path;
+            ArrayList<AddressEntry> Adress = FileManagement.jsonFileToArrayList(path);
             listAdress = new ArrayList<>(Adress);
             this.size = listAdress.size();
         } catch (Exception e) {
@@ -45,9 +58,10 @@ public class AddressBook {
      *                   objeto como el parametro listAdress
      * 
      */
-    public AddressBook(ArrayList<AddressEntry> listAdress) {
+    public AddressBook(String path,ArrayList<AddressEntry> listAdress) {
+        this.path = path;
         this.listAdress = listAdress;
-        FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
+        FileManagement.writeAddressOnJsonFile(path, listAdress);
         this.size = listAdress.size();
     }
 
@@ -75,7 +89,7 @@ public class AddressBook {
 
         if (!isDuplicate) {
             listAdress.add(entry);
-            FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
+            FileManagement.writeAddressOnJsonFile(path, listAdress);
             size = listAdress.size();
             return isDuplicate;
         }
@@ -94,7 +108,7 @@ public class AddressBook {
             System.out.println(HighlightText.CYAN + "no existe ese elemento en esta lista" + HighlightText.BLACK);
         } else {
             listAdress.remove(entry);
-            FileManagement.writeAddressOnJsonFile("src/main/java/com/example/info/contactos.json", listAdress);
+            FileManagement.writeAddressOnJsonFile(path, listAdress);
             size = listAdress.size();
         }
     }

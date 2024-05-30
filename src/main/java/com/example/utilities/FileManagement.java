@@ -1,6 +1,6 @@
 package com.example.utilities;
 
-import com.example.AddressData.*;
+import com.example.addressdata.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -187,24 +187,38 @@ public class FileManagement {
         }
     }
 
+
     /**
      * convierte un archivo json a un Arraylist
      * 
      * @param path directorio del archivo
      * @return lista con los directorios
      */
-    public static ArrayList<AddressEntry> JsonFileToArrayList(String path) {
+    public static ArrayList<AddressEntry> jsonFileToArrayList(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                // Escribir un archivo JSON vacío
+                try (Writer writer = new FileWriter(path)) {
+                    writer.write("[]");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Error al crear el archivo JSON", e);
+            }
+            return new ArrayList<>();
+        }
+
         String json = readFile(path);
         Gson gson = new Gson();
-        Type userListType = new TypeToken<ArrayList<AddressEntry>>() {
-        }.getType();
+        Type userListType = new TypeToken<ArrayList<AddressEntry>>() {}.getType();
         if (json.isEmpty()) {
-            return new ArrayList<AddressEntry>();
+            return new ArrayList<>();
         } else {
             return gson.fromJson(json, userListType);
-
         }
     }
+
 
     /**
      * reescribe o crea sobre un archivo json
@@ -221,5 +235,56 @@ public class FileManagement {
             throw new RuntimeException(e);
         }
     }
+
+       /**
+     * convierte un archivo json a un Arraylist
+     * 
+     * @param path directorio del archivo
+     * @return lista con los directorios
+     */
+    public static ArrayList<String> jsonFileToBooksList(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                // Escribir un archivo JSON vacío
+                try (Writer writer = new FileWriter(path)) {
+                    writer.write("");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Error al crear el archivo JSON", e);
+            }
+            return new ArrayList<>();
+        }
+
+        String json = readFile(path);
+        Gson gson = new Gson();
+        Type userListType = new TypeToken<ArrayList<String>>() {}.getType();
+        if (json.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return gson.fromJson(json, userListType);
+        }
+    }
+
+
+    /**
+     * reescribe o crea sobre un archivo json
+     * 
+     * @param path        ruta del archivo
+     * @param object convierte una lista de AdressList a un archivo json o
+     *                    reescribe uno existente
+     */
+    public static void writeBookListOnJsonFile(String path, Object object) {
+        try (Writer writer = new FileWriter(path)) {
+            Gson gson = new Gson();
+            gson.toJson(object, writer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    
 
 }

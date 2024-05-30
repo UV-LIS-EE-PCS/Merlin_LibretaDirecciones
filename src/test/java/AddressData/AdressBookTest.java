@@ -1,10 +1,10 @@
-package AddressData;
+package Addressdata;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.AddressData.*;
+import com.example.addressdata.*;
 import com.example.utilities.HighlightText;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ class AdressBookTest {
     public void addAddressTest() {
         listAddress.add(entry);
         listAddress.add(entry2);
-        book = new AddressBook(listAddress);
+        book = new AddressBook("src/main/java/com/example/info/directorios/rafael.json",listAddress);
         AddressEntry entryToAdd = new AddressEntry("hernesto", "perez", "hermenegildo galeana", "veracruz", "96030",
                 "humer-merlin@hotmail.com", "9241397640");
 
@@ -41,7 +41,7 @@ class AdressBookTest {
         // first add
         listAddress.add(entry);
         listAddress.add(entryToAdd);
-        book = new AddressBook(listAddress);
+        book = new AddressBook("src/main/java/com/example/info/directorios/rafael.json",listAddress);
         // second add
         boolean isRepeat = book.addAddress(entry);
         Assertions.assertEquals(true, isRepeat);
@@ -55,7 +55,7 @@ class AdressBookTest {
     public void deleteAdressTest() {
         listAddress.add(entry);
         listAddress.add(entry2);
-        book = new AddressBook(listAddress);
+        book = new AddressBook("src/main/java/com/example/info/directorios/rafael.json",listAddress);
         int size = listAddress.size();
         Assertions.assertNotEquals(-1, listAddress.indexOf(entry2));
         book.deleteAdress(entry2);
@@ -67,7 +67,7 @@ class AdressBookTest {
     @Test
     public void deleteAdressIsUnavableTest() {
         listAddress.add(entry);
-        book = new AddressBook(listAddress);
+        book = new AddressBook("src/main/java/com/example/info/directorios/rafael.json",listAddress);
         int size = listAddress.size();
         book.deleteAdress(entry2);
         Assertions.assertEquals(-1, listAddress.indexOf(entry2));
@@ -80,7 +80,7 @@ class AdressBookTest {
         String search = "ra";
         listAddress.add(entry);
         listAddress.add(entry2);
-        book = new AddressBook(listAddress);
+        book = new AddressBook("src/main/java/com/example/info/directorios/rafael.json",listAddress);
         ArrayList<AddressEntry> filterlist = book.filterAddress(search);
         assertEquals(1, filterlist.size());
         assertEquals(entry, listAddress.get(0));
@@ -92,7 +92,7 @@ class AdressBookTest {
         String search = "roberto";
         listAddress.add(entry);
         listAddress.add(entry2);
-        book = new AddressBook(listAddress);
+        book = new AddressBook("src/main/java/com/example/info/directorios/rafael.json",listAddress);
         ArrayList<AddressEntry> filterlist = book.filterAddress(search);
         assertEquals(0, filterlist.size());
     }

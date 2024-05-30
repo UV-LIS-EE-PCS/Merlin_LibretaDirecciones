@@ -1,4 +1,4 @@
-package com.example.AddressData;
+package com.example.addressdata;
 
 import de.vandermeer.asciitable.AsciiTable;
 
