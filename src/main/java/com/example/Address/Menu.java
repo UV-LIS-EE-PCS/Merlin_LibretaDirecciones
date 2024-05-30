@@ -554,6 +554,8 @@ public class Menu {
         System.out.println(
                         "|                    " + HighlightText.RED + "(i)" + HighlightText.BLACK + " agregar lista      |");
         System.out.println(
+                            "|                    " + HighlightText.RED + "(j)" + HighlightText.BLACK + " eliminar lista     |");
+        System.out.println(
                             "|                    " + HighlightText.RED + "(g)" + HighlightText.BLACK + " Salir              |");
         System.out.println("=============================================");
                         }
