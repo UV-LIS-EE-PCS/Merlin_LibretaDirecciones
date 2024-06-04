@@ -136,9 +136,7 @@ public class FileManagement {
             }
         }
         scan.close();
-        if (lineText % 7 != 0) {
-            return listToUpload;
-        }
+     
         return listToUpload;
     }
 
