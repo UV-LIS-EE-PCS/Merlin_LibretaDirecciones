@@ -29,10 +29,12 @@ public class Menu {
     private final String PATHBOOKSDIRECTORIES = "src/main/java/com/example/info/books.json";  
     /**
      * constructor por defecto
+     * @throws FileNotFoundException exepcion en caso de no encontrar el archivo
      * 
      */
-    public Menu() {
-       this.booksDirectories = FileManagement.jsonFileToBooksList(PATHBOOKSDIRECTORIES);
+    public Menu() throws FileNotFoundException {
+        book = AddressBook.getInstance("src/main/java/com/example/info/directorios/prueba");
+        this.booksDirectories = FileManagement.jsonFileToBooksList(PATHBOOKSDIRECTORIES);
     }
 
     /***
@@ -64,7 +66,7 @@ public class Menu {
         System.out.println(HighlightText.BLACK+"ingresa el nombre de la lista a crear:"+HighlightText.RED);
         String nameList = scan.nextLine();
         String path =ADDRESSBOOKDIRECTORY+nameList.replace(" ", "_")+".json";
-        AddressBook newbook = new AddressBook(path);
+        AddressBook newbook = AddressBook.getInstance(path);
         book = newbook;  
         booksDirectories.add(path);
         FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES,booksDirectories);
@@ -89,7 +91,7 @@ public class Menu {
         if (regexComparation("^\\d+$", preIndex)) {
             int index = Integer.parseInt(preIndex);
             if (index < booksDirectories.size()) {
-                AddressBook newbook = new AddressBook(booksDirectories.get(index));
+                AddressBook newbook = book.changeInfo(booksDirectories.get(index));
                 book = newbook;
                 System.out.println("se ha cambiado a la lista: "+HighlightText.BLUE+ getNameFromPath(booksDirectories.get(index))+HighlightText.BLACK);
                 isCorret = true;
@@ -133,7 +135,7 @@ public class Menu {
                     System.out.println("lista de directorios eliminada");
                     return;
                 }
-                book = new AddressBook(booksDirectories.get(0));
+                book = book.changeInfo(booksDirectories.get(0));
                 System.out.println("lista de directorios eliminada");
                 isCorret = true;
             } else {
@@ -574,7 +576,7 @@ public class Menu {
             System.out.println("crea una nueva lista no tienes lista");
             addAddressBook(scan);
         }else if(booksDirectories.size() == 1){
-            book = new AddressBook(booksDirectories.get(0));
+            book = book.changeInfo(booksDirectories.get(0));
         }else{
             selectAddressBook(scan);
         }

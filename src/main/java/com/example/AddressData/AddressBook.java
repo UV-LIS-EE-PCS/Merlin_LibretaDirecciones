@@ -9,9 +9,11 @@ import de.vandermeer.asciitable.AsciiTable;
  * AddressBook es una clase que maneja una colección de entradas de dirección.
  */
 public class AddressBook {
-    private ArrayList<AddressEntry> listAdress;
+    private ArrayList<AddressEntry> listAddress;
     private int size;
-    private String path ;
+    private String path; 
+    private static AddressBook instance;
+
 
     /***
      * consigue el tamaño de el libro
@@ -23,6 +25,8 @@ public class AddressBook {
     }
 
     
+  
+
 
     /**
      * metodo para obtener el path en el que se guarddan los contactos de este addressBook
@@ -33,18 +37,21 @@ public class AddressBook {
     }
 
 
-
-    /**
-     * constructor por defecto carga siempre un archivo
+    public AddressBook changeInfo(String path) throws FileNotFoundException{
+        instance = new AddressBook(path);
+        return instance;
+    }
+  /**
+     * Constructor privado para evitar la creación de instancias desde fuera de la clase.
      * 
      * @throws FileNotFoundException no se encuentra el archivo
      */
-    public AddressBook(String path) throws FileNotFoundException {
+    private AddressBook(String path) throws FileNotFoundException {
         try {
             this.path = path;
-            ArrayList<AddressEntry> Adress = FileManagement.jsonFileToArrayList(path);
-            listAdress = new ArrayList<>(Adress);
-            this.size = listAdress.size();
+            ArrayList<AddressEntry> Address = FileManagement.jsonFileToArrayList(path);
+            listAddress = new ArrayList<>(Address);
+            this.size = listAddress.size();
         } catch (Exception e) {
             System.out.println(e);
             System.out.println(HighlightText.RED + "Archivo de Contactos no encontrado" + HighlightText.BLACK);
@@ -52,17 +59,15 @@ public class AddressBook {
     }
 
     /**
-     * constructor para usar una coleccion de adressEntry como AddressBook
+     * Proveer el método para obtener la instancia única de AddressBook.
      * 
-     * @param listAdress una lista de AdressEntry la cual tomara el
-     *                   objeto como el parametro listAdress
-     * 
+     * @return la instancia única de AddressBook
      */
-    public AddressBook(String path,ArrayList<AddressEntry> listAdress) {
-        this.path = path;
-        this.listAdress = listAdress;
-        FileManagement.writeAddressOnJsonFile(path, listAdress);
-        this.size = listAdress.size();
+    public static AddressBook getInstance(String path) throws FileNotFoundException {
+        if (instance == null) {
+            instance = new AddressBook(path);
+        }
+        return instance;
     }
 
     /**
@@ -75,7 +80,7 @@ public class AddressBook {
     public boolean addAddress(AddressEntry entry) {
         boolean isDuplicate = false;
 
-        for (AddressEntry address : listAdress) {
+        for (AddressEntry address : listAddress) {
             if (address.equals(entry)) {
                 System.out.println(HighlightText.PURPLE + "esta entrada ya existe: " + HighlightText.BLACK);
                 System.out.println(HighlightText.RED + HighlightText.BLACK);
@@ -88,9 +93,9 @@ public class AddressBook {
         }
 
         if (!isDuplicate) {
-            listAdress.add(entry);
-            FileManagement.writeAddressOnJsonFile(path, listAdress);
-            size = listAdress.size();
+            listAddress.add(entry);
+            FileManagement.writeAddressOnJsonFile(path, listAddress);
+            size = listAddress.size();
             return isDuplicate;
         }
         return isDuplicate;
@@ -102,14 +107,14 @@ public class AddressBook {
      * @param entry entrada a eliminar del libro de direcciones
      */
     public void deleteAdress(AddressEntry entry) {
-        if (listAdress.isEmpty()) {
+        if (listAddress.isEmpty()) {
             System.out.println("lista vacia");
-        } else if (listAdress.indexOf(entry) == -1) {
+        } else if (listAddress.indexOf(entry) == -1) {
             System.out.println(HighlightText.CYAN + "no existe ese elemento en esta lista" + HighlightText.BLACK);
         } else {
-            listAdress.remove(entry);
-            FileManagement.writeAddressOnJsonFile(path, listAdress);
-            size = listAdress.size();
+            listAddress.remove(entry);
+            FileManagement.writeAddressOnJsonFile(path, listAddress);
+            size = listAddress.size();
         }
     }
 
@@ -118,10 +123,10 @@ public class AddressBook {
      * muestra por pantalla todas las direcciones del libro
      */
     public void showAdress() {
-        if (listAdress.isEmpty()) {
+        if (listAddress.isEmpty()) {
             System.out.println(HighlightText.CYAN + "Sin datos" + HighlightText.BLACK);
         } else {
-            System.out.println(generateAllDataTable(listAdress) + "\n");
+            System.out.println(generateAllDataTable(listAddress) + "\n");
 
         }
     }
@@ -160,7 +165,7 @@ public class AddressBook {
      */
     public void exportAdressBook(String destinationPath) {
         try {
-            for (AddressEntry entry : listAdress) {
+            for (AddressEntry entry : listAddress) {
                 FileManagement.writeAddressToFile(entry, destinationPath);
             }
             System.out.println(HighlightText.PURPLE + "Archivo importado con exito" + HighlightText.BLACK);
@@ -179,7 +184,7 @@ public class AddressBook {
      */
     public ArrayList<AddressEntry> filterAddress(String search) {
         ArrayList<AddressEntry> filterAddress = new ArrayList<>();
-        for (AddressEntry entry : listAdress) {
+        for (AddressEntry entry : listAddress) {
             if (entry.getName().toLowerCase().strip().contains(search.toLowerCase().strip())) {
                 filterAddress.add(entry);
             }
