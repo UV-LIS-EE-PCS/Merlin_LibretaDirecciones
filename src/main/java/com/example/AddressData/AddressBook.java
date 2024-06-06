@@ -2,6 +2,8 @@ package com.example.addressdata;
 
 import com.example.utilities.*;
 import java.util.ArrayList;
+
+
 import java.io.*;
 import de.vandermeer.asciitable.AsciiTable;
 
@@ -36,17 +38,12 @@ public class AddressBook {
         return path;
     }
 
-
-    public AddressBook changeInfo(String path) throws FileNotFoundException{
-        instance = new AddressBook(path);
-        return instance;
-    }
-  /**
-     * Constructor privado para evitar la creación de instancias desde fuera de la clase.
-     * 
-     * @throws FileNotFoundException no se encuentra el archivo
+    /**
+     * Cambia la informacion de un AddressBook
+     * @param path directorio del archivo que contiene la informacion
+     * @throws FileNotFoundException error en caso de no encontrar el ar
      */
-    private AddressBook(String path) throws FileNotFoundException {
+    public void changeInfo(String path) throws FileNotFoundException{
         try {
             this.path = path;
             ArrayList<AddressEntry> Address = FileManagement.jsonFileToArrayList(path);
@@ -55,7 +52,15 @@ public class AddressBook {
         } catch (Exception e) {
             System.out.println(e);
             System.out.println(HighlightText.RED + "Archivo de Contactos no encontrado" + HighlightText.BLACK);
-        }
+        };
+    }
+  /**
+     * Constructor privado para evitar la creación de instancias desde fuera de la clase.
+     * 
+     * @throws FileNotFoundException no se encuentra el archivo
+     */
+    private AddressBook(String path) throws FileNotFoundException {
+        changeInfo(path);
     }
 
     /**

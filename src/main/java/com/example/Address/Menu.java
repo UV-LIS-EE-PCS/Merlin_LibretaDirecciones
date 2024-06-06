@@ -65,11 +65,13 @@ public class Menu {
     private void addAddressBook(Scanner scan) throws FileNotFoundException{
         System.out.println(HighlightText.BLACK+"ingresa el nombre de la lista a crear:"+HighlightText.RED);
         String nameList = scan.nextLine();
+        
         String path =ADDRESSBOOKDIRECTORY+nameList.replace(" ", "_")+".json";
-        AddressBook newbook = AddressBook.getInstance(path);
-        book = newbook;  
+        AddressBook book = AddressBook.getInstance(path);
+        book.changeInfo(path); 
         booksDirectories.add(path);
         FileManagement.writeBookListOnJsonFile(PATHBOOKSDIRECTORIES,booksDirectories);
+
 
     }
 
@@ -91,8 +93,8 @@ public class Menu {
         if (regexComparation("^\\d+$", preIndex)) {
             int index = Integer.parseInt(preIndex);
             if (index < booksDirectories.size()) {
-                AddressBook newbook = book.changeInfo(booksDirectories.get(index));
-                book = newbook;
+                book.changeInfo(booksDirectories.get(index));
+
                 System.out.println("se ha cambiado a la lista: "+HighlightText.BLUE+ getNameFromPath(booksDirectories.get(index))+HighlightText.BLACK);
                 isCorret = true;
             } else {
@@ -135,7 +137,7 @@ public class Menu {
                     System.out.println("lista de directorios eliminada");
                     return;
                 }
-                book = book.changeInfo(booksDirectories.get(0));
+                book.changeInfo(booksDirectories.get(0));
                 System.out.println("lista de directorios eliminada");
                 isCorret = true;
             } else {
@@ -576,7 +578,7 @@ public class Menu {
             System.out.println("crea una nueva lista no tienes lista");
             addAddressBook(scan);
         }else if(booksDirectories.size() == 1){
-            book = book.changeInfo(booksDirectories.get(0));
+            book.changeInfo(booksDirectories.get(0));
         }else{
             selectAddressBook(scan);
         }
